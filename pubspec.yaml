@@ -1,0 +1,39 @@
+name: sipelajar
+version: 1.0.0+1
+publish_to: none
+description: A new Flutter project.
+environment:
+  sdk: ">=2.17.3 <3.0.0"
+
+dependencies:
+  cupertino_icons: ^1.0.5
+  get: ^4.6.5
+  package_info_plus: ^1.4.2
+  flutter_downloader: ^1.8.0+1
+  app_installer: ^1.1.0
+  get_storage: ^2.0.3
+  http: ^0.13.4
+  flutter:
+    sdk: flutter
+  sqflite: ^2.0.2+1
+  path_provider: ^2.0.11
+  location: ^4.4.0
+  fluttertoast: ^8.0.9
+  flutter_spinkit: ^5.1.0
+  permission_handler: ^10.0.0
+  open_file: ^3.2.1
+  carousel_slider: ^4.1.1
+  cached_network_image: ^3.2.1
+
+dev_dependencies:
+  flutter_lints: ^2.0.1
+  flutter_test:
+    sdk: flutter
+  change_app_package_name: ^1.1.0
+
+flutter:
+  assets:
+    - assets/icons/
+    - assets/images/
+    - assets/sounds/
+  uses-material-design: true
