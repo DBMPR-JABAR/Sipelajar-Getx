@@ -149,7 +149,7 @@ class LoginView extends GetView<LoginController> {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 primary: controller.buttonEnabled.value
-                                    ? Colors.amberAccent
+                                    ? const Color.fromARGB(255, 245, 193, 7)
                                     : Colors.grey,
                                 splashFactory: controller.buttonEnable.value
                                     ? null

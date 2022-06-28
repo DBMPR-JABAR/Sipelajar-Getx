@@ -8,7 +8,7 @@ class Loading extends StatelessWidget {
       color: Colors.transparent,
       child: const Center(
         child: SpinKitFadingFour(
-          color: Colors.white,
+          color: Colors.black,
           size: 50.0,
         ),
       ),

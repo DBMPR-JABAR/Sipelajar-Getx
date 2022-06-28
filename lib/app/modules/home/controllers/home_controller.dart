@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:sipelajar/app/data/model/local/usermodel.dart';
 import 'package:sipelajar/app/services/api/utilsProvider.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -11,16 +12,21 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:open_file/open_file.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
+import '../../../services/connectivity/connectivity.dart';
+import '../../../services/database/database.dart';
+
 class HomeController extends GetxController
     with GetSingleTickerProviderStateMixin {
+  final storage = GetStorage();
+  final connectivityService = Get.find<ConnectivityService>();
   late TabController tabController;
   List<String> carouselData = [
-    'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
-    'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
-    'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
-    'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
-    'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
-    'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
+    'https://tj.temanjabar.net/storage/50/WhatsApp-Image-2022-06-23-at-12.18.00.jpeg',
+    'https://tj.temanjabar.net/storage/49/WhatsApp-Image-2022-06-17-at-15.48.27-(4).jpeg',
+    'https://tj.temanjabar.net/storage/48/WhatsApp-Image-2022-06-17-at-15.46.39.jpeg',
+    'https://tj.temanjabar.net/storage/46/WhatsApp-Image-2022-06-09-at-13.08.32.jpeg',
+    'https://tj.temanjabar.net/storage/43/WhatsApp-Image-2022-06-03-at-09.37.10.jpeg',
+    'https://tj.temanjabar.net/storage/25/Morning-Routine-Neutral-Photo-Collage.png',
   ];
   var carouselList = <Widget>[].obs;
 
@@ -104,26 +110,8 @@ class HomeController extends GetxController
         });
   }
 
-  void permision() {
-    var storage = Permission.storage.request();
-    var location = Permission.location.request();
-    Future.wait([storage, location]).then((value) => {
-          if (value.contains(PermissionStatus.granted))
-            {Get.offNamed('/login')}
-          else
-            {
-              Get.snackbar('Permission Denied', 'Please grant permission',
-                  snackPosition: SnackPosition.BOTTOM,
-                  backgroundColor: Colors.red,
-                  duration: Duration(seconds: 2),
-                  icon: Icon(Icons.error))
-            }
-        });
-  }
-
   Future download(String url) async {
     var status = await Permission.storage.request();
-
     if (status.isGranted) {
       await FlutterDownloader.enqueue(
         url: url,
@@ -242,7 +230,7 @@ class HomeController extends GetxController
                   ),
                   fit: BoxFit.fill,
                   width: Get.width,
-                  height: Get.height / 3,
+                  height: Get.height / 2.5,
                 ),
               ),
               Positioned(
@@ -251,9 +239,9 @@ class HomeController extends GetxController
                 right: 0,
                 child: Container(
                   padding: const EdgeInsets.all(10),
-                  child: Text(
+                  child: const Text(
                     'dummy text',
-                    style: const TextStyle(
+                    style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,
                         fontWeight: FontWeight.bold),
@@ -263,5 +251,15 @@ class HomeController extends GetxController
             ],
           )),
     );
+  }
+
+  logout() async {
+    try {
+      await storage.erase();
+      await DatabaseHelper.instance.truncateAllTable();
+      Get.offAllNamed('/login');
+    } catch (e) {
+      print(e);
+    }
   }
 }

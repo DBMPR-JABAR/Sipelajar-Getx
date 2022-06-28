@@ -1,6 +1,12 @@
 import 'package:get/get.dart';
 
 import '../modules/home/bindings/home_binding.dart';
+import '../modules/home/sapulobang/bindings/sapulobang_binding.dart';
+import '../modules/home/sapulobang/entry_data_lubang/bindings/entry_data_lubang_binding.dart';
+import '../modules/home/sapulobang/entry_data_lubang/views/entry_data_lubang_view.dart';
+import '../modules/home/sapulobang/start_survei_lubang/bindings/start_survei_lubang_binding.dart';
+import '../modules/home/sapulobang/start_survei_lubang/views/start_survei_lubang_view.dart';
+import '../modules/home/sapulobang/views/sapulobang_view.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
@@ -14,10 +20,27 @@ class AppPages {
 
   static final routes = [
     GetPage(
-      name: _Paths.HOME,
-      page: () => const HomeView(),
-      binding: HomeBinding(),
-    ),
+        name: _Paths.HOME,
+        page: () => HomeView(),
+        binding: HomeBinding(),
+        children: [
+          GetPage(
+              name: _Paths.SAPULOBANG,
+              page: () => SapulobangView(),
+              binding: SapulobangBinding(),
+              children: [
+                GetPage(
+                  name: _Paths.START_SURVEI_LUBANG,
+                  page: () => StartSurveiLubangView(),
+                  binding: StartSurveiLubangBinding(),
+                ),
+                GetPage(
+                  name: _Paths.ENTRY_DATA_LUBANG,
+                  page: () => EntryDataLubangView(),
+                  binding: EntryDataLubangBinding(),
+                ),
+              ]),
+        ]),
     GetPage(
       name: _Paths.LOGIN,
       page: () => const LoginView(),

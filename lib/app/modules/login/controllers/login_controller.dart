@@ -6,6 +6,8 @@ import 'package:sipelajar/app/data/model/local/usermodel.dart';
 import 'package:sipelajar/app/helper/utils.dart';
 import 'package:sipelajar/app/services/api/authProvider.dart';
 
+import '../../../data/model/local/ruasModel.dart';
+
 class LoginController extends GetxController {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -62,7 +64,7 @@ class LoginController extends GetxController {
     }
   }
 
-  login() async {
+  void login() async {
     isLoading.value = true;
     await AuthProvider.login(
       usernameController.text,
@@ -71,13 +73,20 @@ class LoginController extends GetxController {
       isLoading.value = false;
       if (value.status == 'success') {
         await storage.write('accestoken', value.data.token!.accessToken);
-        UserModel(
+        await UserModel(
                 name: value.data.user!.name,
                 email: usernameController.text,
                 password: passwordController.text,
                 token: value.data.token!.accessToken,
                 encryptedId: value.data.user!.encryptedId)
             .save();
+        List<RuasJalanModel> ruas = [];
+        for (var item in value.data.user!.ruas) {
+          ruas.add(RuasJalanModel(
+              idRuasJalan: item.idRuasJalan,
+              namaRuasJalan: item.namaRuasJalan));
+        }
+        await RuasJalanModel.saveMany(ruas);
         return Get.offAllNamed('/home');
       } else {
         usernameError.value = 'Username Salah';

@@ -7,13 +7,17 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sipelajar/app/constant/theme.dart';
+import 'package:sipelajar/app/services/connectivity/connectivity.dart';
+import 'package:sipelajar/app/services/location/location.dart';
 
 import 'app/routes/app_pages.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await GetStorage.init();
 
+  await GetStorage.init();
+  final storage = GetStorage();
+  final token = storage.read('accestoken');
   HttpOverrides.global = MyHttpOverrides();
   await FlutterDownloader.initialize(
       debug:
@@ -21,8 +25,24 @@ void main() async {
       ignoreSsl:
           true // option: set to false to disable working with http links (default: false)
       );
+
   deleteFile();
-  runApp(const Sipelajar());
+  runApp(GetMaterialApp(
+    enableLog: true,
+    debugShowCheckedModeBanner: false,
+    title: "Sipelajar",
+    initialRoute: token == null ? '/login' : '/home',
+    theme: appTheme,
+    getPages: AppPages.routes,
+  ));
+  initServices();
+}
+
+void initServices() async {
+  print('starting services ');
+  await Get.putAsync<ConnectivityService>(() => ConnectivityService().init());
+  await Get.putAsync<LocationService>(() => LocationService().init());
+  print('All services started');
 }
 
 class Sipelajar extends StatefulWidget {

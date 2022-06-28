@@ -2,11 +2,12 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:sipelajar/app/services/connectivity/connectivity.dart';
 
 import '../controllers/home_controller.dart';
+import '../sapulobang/views/sapulobang_view.dart';
 
 class HomeView extends GetView<HomeController> {
-  const HomeView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -21,7 +22,8 @@ class HomeView extends GetView<HomeController> {
                   height: 45,
                 ),
                 IconButton(
-                    onPressed: () {}, icon: const Icon(Icons.exit_to_app)),
+                    onPressed: () => controller.logout(),
+                    icon: const Icon(Icons.exit_to_app)),
               ],
             ),
           ),
@@ -29,8 +31,8 @@ class HomeView extends GetView<HomeController> {
             children: [
               Obx(() => CarouselSlider(
                   options: CarouselOptions(
-                      height: 180,
-                      viewportFraction: 0.9,
+                      height: 200,
+                      viewportFraction: 0.7,
                       autoPlay: true,
                       autoPlayInterval: const Duration(seconds: 10),
                       autoPlayAnimationDuration:
@@ -49,18 +51,20 @@ class HomeView extends GetView<HomeController> {
                       controller: controller.tabController,
                       tabs: controller.listTab,
                       labelColor: Colors.black,
+                      unselectedLabelColor: Colors.grey,
                     ),
                     Expanded(
-                      child: TabBarView(
-                        controller: controller.tabController,
-                        children: [
-                          const Center(
-                            child: const Text('Sapu Lobang'),
-                          ),
-                          const Center(
-                            child: Text('Kemandoran'),
-                          ),
-                        ],
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        child: TabBarView(
+                          controller: controller.tabController,
+                          children: [
+                            SapulobangView(),
+                            const Center(
+                              child: Text('Upcoming'),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],

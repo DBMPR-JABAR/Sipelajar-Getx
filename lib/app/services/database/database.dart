@@ -1,18 +1,14 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:io';
+import 'package:path/path.dart' as p;
 
 class DatabaseHelper {
   DatabaseHelper._privateConstructor();
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
   static Database? _database;
-  Future<Database> get database async => _database ??= await _initDatabase();
+  Future<Database> get database async => _database ?? await _initDatabase();
   Future<Database> _initDatabase() async {
-    Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, 'sipelajar.db');
     return await openDatabase(
-      path,
+      p.join(await getDatabasesPath(), 'sipelajar.db'),
       version: 1,
       onCreate: _onCreate,
     );
@@ -49,5 +45,12 @@ class DatabaseHelper {
         kd_sup TEXT
         )''',
     );
+  }
+
+  Future<void> truncateAllTable() async {
+    final database = await DatabaseHelper.instance.database;
+    await database.rawDelete('DELETE FROM user');
+    await database.rawDelete('DELETE FROM ruas');
+    await database.rawDelete('DELETE FROM data_sup');
   }
 }

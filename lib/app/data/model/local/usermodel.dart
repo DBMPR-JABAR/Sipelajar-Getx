@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../../../services/local/database.dart';
+import '../../../services/database/database.dart';
 
 class UserModel {
   UserModel({
@@ -47,16 +47,6 @@ class UserModel {
       'user',
       toJson(),
       conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-  }
-
-  Future<void> update() async {
-    final database = await DatabaseHelper.instance.database;
-    await database.update(
-      'user',
-      toJson(),
-      where: 'id = ?',
-      whereArgs: [id],
     );
   }
 

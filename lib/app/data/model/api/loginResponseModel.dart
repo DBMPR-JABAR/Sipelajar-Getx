@@ -79,7 +79,6 @@ class User {
     required this.id,
     required this.name,
     required this.email,
-    required this.emailVerifiedAt,
     required this.role,
     required this.internalRoleId,
     required this.sup,
@@ -91,20 +90,18 @@ class User {
   int id;
   String name;
   String email;
-  DateTime emailVerifiedAt;
   String role;
   int internalRoleId;
-  String sup;
-  String blokir;
+  String? sup;
+  String? blokir;
   List<Ruas> ruas;
-  String encryptedId;
+  String? encryptedId;
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json["id"],
       name: json["name"],
       email: json["email"],
-      emailVerifiedAt: DateTime.parse(json["email_verified_at"]),
       role: json["role"],
       internalRoleId: json["internal_role_id"],
       sup: json["sup"],
@@ -118,7 +115,6 @@ class User {
         "id": id,
         "name": name,
         "email": email,
-        "email_verified_at": emailVerifiedAt.toIso8601String(),
         "role": role,
         "internal_role_id": internalRoleId,
         "sup": sup,
