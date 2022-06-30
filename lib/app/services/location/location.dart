@@ -1,11 +1,26 @@
 import 'package:get/get.dart';
 import 'package:location/location.dart';
+import 'package:geocoding/geocoding.dart' as geo;
+import 'package:map_launcher/map_launcher.dart';
 
 class LocationService extends GetxService {
+  var availableMaps = <AvailableMap>[].obs;
   Location location = Location();
   var serviceEnabled = false;
   late PermissionStatus permissionGranted;
   late LocationData locationData;
+  var isLoading = true.obs;
+
+  getAdrres(double? lat, double? long) async {
+    try {
+      var addres = await geo.placemarkFromCoordinates(
+          lat ?? locationData.latitude!, long ?? locationData.longitude!,
+          localeIdentifier: 'id_ID');
+      return '${addres[0].street} ${addres[0].subLocality} ${addres[0].locality} ${addres[0].subAdministrativeArea} ${addres[0].administrativeArea} ${addres[0].postalCode}';
+    } catch (e) {
+      print(e);
+    }
+  }
 
   Future<LocationService> init() async {
     serviceEnabled = await location.serviceEnabled();
@@ -23,9 +38,10 @@ class LocationService extends GetxService {
         permissionGranted = await location.requestPermission();
       }
     }
+    location.changeSettings(accuracy: LocationAccuracy.high, interval: 1000);
     locationData = await location.getLocation();
-
-    location.changeSettings(accuracy: LocationAccuracy.high);
+    availableMaps.value = await MapLauncher.installedMaps;
+    isLoading.value = false;
 
     return this;
   }

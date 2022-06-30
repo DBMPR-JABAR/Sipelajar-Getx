@@ -1,7 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.dbmpr.sipelajar">
-   <application
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <application
         android:label="Sipelajar"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">

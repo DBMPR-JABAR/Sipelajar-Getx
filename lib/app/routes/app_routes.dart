@@ -11,6 +11,7 @@ abstract class Routes {
   static const ENTRY_DATA_LUBANG =
       _Paths.HOME + _Paths.SAPULOBANG + _Paths.ENTRY_DATA_LUBANG;
   static const CONNECTIVITY = _Paths.CONNECTIVITY;
+  static const CAMERA_CAM = _Paths.CAMERA_CAM;
 }
 
 abstract class _Paths {
@@ -21,4 +22,5 @@ abstract class _Paths {
   static const START_SURVEI_LUBANG = '/start-survei-lubang';
   static const ENTRY_DATA_LUBANG = '/entry-data-lubang';
   static const CONNECTIVITY = '/connectivity';
+  static const CAMERA_CAM = '/camera-cam';
 }

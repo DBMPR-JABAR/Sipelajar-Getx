@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_arcgis/esri_plugin.dart';
 
 import 'package:get/get.dart';
 
@@ -31,7 +33,7 @@ class EntryDataLubangView extends GetView<EntryDataLubangController> {
                       ),
                     ),
                     filled: true,
-                    fillColor: Colors.grey[300],
+                    fillColor: Colors.grey[400],
                   ),
                   style: const TextStyle(
                       fontSize: 16, fontWeight: FontWeight.bold),
@@ -50,10 +52,15 @@ class EntryDataLubangView extends GetView<EntryDataLubangController> {
                       ),
                     ),
                     filled: true,
-                    fillColor: Colors.grey[300],
+                    fillColor: Colors.grey[400],
                   ),
                   style: const TextStyle(
                       fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 15),
+                SizedBox(
+                  height: 400,
+                  child: mapsBuild(),
                 ),
                 const SizedBox(height: 15),
                 labelBuilder('Lokasi STA'),
@@ -69,12 +76,10 @@ class EntryDataLubangView extends GetView<EntryDataLubangController> {
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(
-                              color: Colors.white,
-                            ),
+                            borderSide: const BorderSide(color: Colors.white),
                           ),
                           filled: true,
-                          fillColor: Colors.grey[300],
+                          fillColor: Colors.grey[100],
                         ),
                         style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
@@ -96,12 +101,15 @@ class EntryDataLubangView extends GetView<EntryDataLubangController> {
                             ),
                           ),
                           filled: true,
-                          fillColor: Colors.grey[300],
+                          fillColor: Colors.grey[100],
                         ),
                         style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                     ),
+                    const Text('+',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold)),
                     SizedBox(
                       width: Get.width * 0.3,
                       child: TextField(
@@ -115,7 +123,7 @@ class EntryDataLubangView extends GetView<EntryDataLubangController> {
                             ),
                           ),
                           filled: true,
-                          fillColor: Colors.grey[300],
+                          fillColor: Colors.grey[100],
                         ),
                         style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
@@ -142,7 +150,7 @@ class EntryDataLubangView extends GetView<EntryDataLubangController> {
                             fontWeight: FontWeight.bold,
                             color: Colors.black)),
                     filled: true,
-                    fillColor: Colors.grey[300],
+                    fillColor: Colors.grey[100],
                   ),
                   style: const TextStyle(
                       fontSize: 16, fontWeight: FontWeight.bold),
@@ -232,7 +240,7 @@ class EntryDataLubangView extends GetView<EntryDataLubangController> {
                   ],
                 ),
                 const Text(
-                    'Catatan Lubang Kecil ( Diameter < 50cm ), Lubang Besar ( Diameter > 50cm )',
+                    'Catatan: Lubang Kecil ( Diameter < 50cm ), Lubang Besar ( Diameter > 50cm )',
                     style: TextStyle(
                       fontSize: 14,
                     )),
@@ -272,7 +280,7 @@ class EntryDataLubangView extends GetView<EntryDataLubangController> {
                   ],
                 ),
                 const Text(
-                    'Catatan Lubang Dangkal ( Kedalaman < 5cm ), Lubang Dalam ( Kedalaman > 5cm )',
+                    'Catatan: Lubang Dangkal ( Kedalaman < 5cm ), Lubang Dalam ( Kedalaman > 5cm )',
                     style: TextStyle(
                       fontSize: 14,
                     )),
@@ -312,7 +320,7 @@ class EntryDataLubangView extends GetView<EntryDataLubangController> {
                   ],
                 ),
                 const Text(
-                    'Catatan Berpotensi Lubang Merupakan Lubang Yang Akan Menjadi Lubang Dikemudian Hari',
+                    'Catatan: Berpotensi Lubang Merupakan Lubang Yang Akan Menjadi Lubang Dikemudian Hari',
                     style: TextStyle(
                       fontSize: 14,
                     )),
@@ -332,7 +340,7 @@ class EntryDataLubangView extends GetView<EntryDataLubangController> {
                     ),
                     hintText: 'Masukan Keterangan',
                     filled: true,
-                    fillColor: Colors.grey[300],
+                    fillColor: Colors.grey[100],
                   ),
                   style: const TextStyle(
                       fontSize: 16, fontWeight: FontWeight.bold),
@@ -360,9 +368,16 @@ class EntryDataLubangView extends GetView<EntryDataLubangController> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                primary: Color.fromARGB(255, 12, 201, 97),
+                                primary: const Color.fromARGB(255, 12, 201, 97),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                Get.toNamed('/camera-cam', arguments: [
+                                  controller.currentLocation
+                                ])!
+                                    .then((value) => {
+                                          controller.onImageChange(value),
+                                        });
+                              },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: const [
@@ -380,10 +395,26 @@ class EntryDataLubangView extends GetView<EntryDataLubangController> {
                               ))),
                       const SizedBox(height: 10),
                       const Text(
-                          'Catatan: Pengambilan Foto Harus Berada Dilakukan Secara Horizontal / Searah Jalan Dari Kilometer Rendah Ke Tinggi',
+                          'Catatan: Pengambilan Foto Harus Dilakukan Secara Searah Jalan Dari Kilometer Rendah Ke Tinggi Dan Posisi Potrait.',
                           style: TextStyle(
                               fontSize: 14, fontWeight: FontWeight.w500)),
                     ],
+                  ),
+                ),
+                const SizedBox(height: 15),
+                SizedBox(
+                  width: Get.width,
+                  height: 45,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: const Text('Simpan',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold)),
+                    onPressed: () {},
                   ),
                 )
               ],
@@ -394,6 +425,93 @@ class EntryDataLubangView extends GetView<EntryDataLubangController> {
 
   Text labelBuilder(String label) => Text(label,
       style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold));
+
+  Stack mapsBuild() {
+    return Stack(
+      children: [
+        Obx(() => FlutterMap(
+              mapController: controller.mapsController,
+              options: MapOptions(
+                  zoom: 10,
+                  plugins: [EsriPlugin()],
+                  interactiveFlags: controller.interActiveFlags,
+                  enableScrollWheel: false),
+              layers: [
+                TileLayerOptions(
+                  urlTemplate:
+                      'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
+                  subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+                ),
+                PolylineLayerOptions(
+                  polylineCulling: false,
+                  polylines: [
+                    Polyline(
+                      points: controller.polyline,
+                      strokeWidth: 3.0,
+                      color: Colors.blue,
+                    ),
+                  ],
+                ),
+                MarkerLayerOptions(
+                  markers: [
+                    Marker(
+                      width: 45.0,
+                      height: 45.0,
+                      point: controller.currentLocation.value,
+                      builder: (ctx) => const Icon(
+                        Icons.location_history,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            )),
+        Obx(() => controller.connectionService.connectionStatus.value
+            ? Positioned(
+                bottom: 10,
+                right: 10,
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      color: Colors.white),
+                  child: IconButton(
+                      iconSize: 45,
+                      onPressed: () {
+                        controller.onTapCenter();
+                      },
+                      icon: const Icon(Icons.my_location)),
+                ))
+            : Positioned(
+                bottom: 50,
+                right: 10,
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      color: Colors.red),
+                  child: TextButton(
+                    onPressed: () {
+                      controller.openGoogleMaps();
+                    },
+                    child: const Text('Cek Lokasi Offile Mode',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold)),
+                  ),
+                ))),
+        Obx(() => Positioned(
+            bottom: 10,
+            left: 0,
+            child: SizedBox(
+              width: Get.width * 0.8,
+              child: Text(controller.address.value,
+                  style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black)),
+            )))
+      ],
+    );
+  }
 }
 
 class UpperCaseTextFormatter extends TextInputFormatter {

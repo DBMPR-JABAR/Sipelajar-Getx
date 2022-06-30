@@ -11,6 +11,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:open_file/open_file.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:sipelajar/app/services/location/location.dart';
 
 import '../../../services/connectivity/connectivity.dart';
 import '../../../services/database/database.dart';
@@ -29,6 +30,7 @@ class HomeController extends GetxController
     'https://tj.temanjabar.net/storage/25/Morning-Routine-Neutral-Photo-Collage.png',
   ];
   var carouselList = <Widget>[].obs;
+  var isLoading = true.obs;
 
   List<Widget> listTab = [
     const Tab(text: 'Sapu Lobang'),
@@ -42,16 +44,21 @@ class HomeController extends GetxController
 
   @override
   void onInit() {
+    iniLocationService();
     tabController =
         TabController(length: listTab.length, vsync: this, initialIndex: 0);
     checkUpdate();
     _bindBackgroundIsolate();
     getUser();
     createWidgetCarousel();
-
     FlutterDownloader.registerCallback(downloadCallback);
 
     super.onInit();
+  }
+
+  iniLocationService() async {
+    await Get.putAsync<LocationService>(() => LocationService().init());
+    isLoading.value = false;
   }
 
   getUser() async {

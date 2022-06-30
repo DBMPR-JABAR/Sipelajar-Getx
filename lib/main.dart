@@ -41,7 +41,7 @@ void main() async {
 void initServices() async {
   print('starting services ');
   await Get.putAsync<ConnectivityService>(() => ConnectivityService().init());
-  await Get.putAsync<LocationService>(() => LocationService().init());
+
   print('All services started');
 }
 

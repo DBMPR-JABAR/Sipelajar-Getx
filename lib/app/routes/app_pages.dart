@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import 'package:sipelajar/app/modules/cameraCam/bindings/camera_cam_binding.dart';
+import 'package:sipelajar/app/modules/cameraCam/views/camera_cam_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/sapulobang/bindings/sapulobang_binding.dart';
 import '../modules/home/sapulobang/entry_data_lubang/bindings/entry_data_lubang_binding.dart';
@@ -45,6 +47,11 @@ class AppPages {
       name: _Paths.LOGIN,
       page: () => const LoginView(),
       binding: LoginBinding(),
+    ),
+    GetPage(
+      name: _Paths.CAMERA_CAM,
+      page: () => CameraCamView(),
+      binding: CameraCamBinding(),
     ),
   ];
 }

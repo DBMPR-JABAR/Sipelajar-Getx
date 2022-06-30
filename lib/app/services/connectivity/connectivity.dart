@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class ConnectivityService extends GetxService {
+  static const signalChanell = MethodChannel('getSignalStrength');
   var connectionStatus = false.obs;
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription streamSubscription;
