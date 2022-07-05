@@ -4,22 +4,20 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:sipelajar/app/data/model/local/usermodel.dart';
+import 'package:sipelajar/app/data/model/local/userModel.dart';
+import 'package:sipelajar/app/helper/utils.dart';
 import 'package:sipelajar/app/services/api/utilsProvider.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:open_file/open_file.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:sipelajar/app/services/location/location.dart';
 
-import '../../../services/connectivity/connectivity.dart';
 import '../../../services/database/database.dart';
 
 class HomeController extends GetxController
     with GetSingleTickerProviderStateMixin {
   final storage = GetStorage();
-  final connectivityService = Get.find<ConnectivityService>();
   late TabController tabController;
   List<String> carouselData = [
     'https://tj.temanjabar.net/storage/50/WhatsApp-Image-2022-06-23-at-12.18.00.jpeg',
@@ -44,7 +42,7 @@ class HomeController extends GetxController
 
   @override
   void onInit() {
-    iniLocationService();
+    permisionFiles();
     tabController =
         TabController(length: listTab.length, vsync: this, initialIndex: 0);
     checkUpdate();
@@ -52,13 +50,23 @@ class HomeController extends GetxController
     getUser();
     createWidgetCarousel();
     FlutterDownloader.registerCallback(downloadCallback);
-
+    isLoading.value = false;
     super.onInit();
   }
 
-  iniLocationService() async {
-    await Get.putAsync<LocationService>(() => LocationService().init());
-    isLoading.value = false;
+  void permisionFiles() async {
+    var storage = await Permission.storage.request();
+    var manageStorage = await Permission.manageExternalStorage.request();
+    if (storage.isDenied) {
+      showToast(
+          'Beberapa fitur tidak dapat digunakan karena Anda tidak mengizinkan akses penyimpanan');
+      await Permission.storage.request();
+    }
+    if (manageStorage.isDenied) {
+      showToast(
+          'Beberapa fitur tidak dapat digunakan karena Anda tidak mengizinkan akses penyimpanan');
+      await Permission.manageExternalStorage.request();
+    }
   }
 
   getUser() async {
@@ -174,9 +182,7 @@ class HomeController extends GetxController
   Future<void> open() async {
     OpenFile.open(
       '${(await getExternalStorageDirectory())!.path}/Sipelajar.apk',
-    ).then((value) => {
-          print(value.type),
-        });
+    ).then((value) => {});
   }
 
   void retry(String id) {
@@ -198,10 +204,6 @@ class HomeController extends GetxController
       final status = data[1] as DownloadTaskStatus;
       final progress = data[2] as int;
 
-      print(
-        'Callback on UI isolate: '
-        'task ($taskId) is in status ($status) and process ($progress)',
-      );
       progres.value = progress;
       statusDowload = status;
       task.value = taskId;
@@ -261,12 +263,8 @@ class HomeController extends GetxController
   }
 
   logout() async {
-    try {
-      await storage.erase();
-      await DatabaseHelper.instance.truncateAllTable();
-      Get.offAllNamed('/login');
-    } catch (e) {
-      print(e);
-    }
+    await storage.erase();
+    await DatabaseHelper.instance.truncateAllTable();
+    Get.offAllNamed('/login');
   }
 }

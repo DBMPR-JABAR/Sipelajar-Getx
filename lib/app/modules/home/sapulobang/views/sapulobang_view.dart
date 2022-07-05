@@ -8,16 +8,22 @@ class SapulobangView extends GetView<SapulobangController> {
   @override
   Widget build(BuildContext context) {
     return GridView.extent(
-      maxCrossAxisExtent: Get.width / 2.5,
+      maxCrossAxisExtent: Get.width / 2,
       mainAxisSpacing: 10,
       crossAxisSpacing: 10,
       children: [
         createItemMenu('Entry Data Lubang', 'assets/icons/img_entry_lubang.png',
             '/home/sapulobang/start-survei-lubang'),
-        createItemMenu('Entry Penanganan',
-            'assets/icons/img_entry_penanganan.png', 'entry_penanganan'),
+        createItemMenu(
+            'Entry Rencana Penanganan',
+            'assets/icons/img_entry_rencana.png',
+            '/home/sapulobang/start-survei-lubang'),
+        createItemMenu(
+            'Entry Penanganan',
+            'assets/icons/img_entry_penanganan.png',
+            '/home/sapulobang/start-survei-lubang'),
         createItemMenu('Rekap Hasil Surveri', 'assets/icons/img_rekap.png',
-            'rekap_surveri'),
+            'rekap_surveri')
       ],
     );
   }
@@ -26,7 +32,7 @@ class SapulobangView extends GetView<SapulobangController> {
 InkWell createItemMenu(String title, String image, String route) {
   return InkWell(
     onTap: () {
-      Get.toNamed(route);
+      Get.toNamed(route, arguments: title);
     },
     child: Container(
       decoration: BoxDecoration(
@@ -35,17 +41,16 @@ InkWell createItemMenu(String title, String image, String route) {
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset(
             image,
             fit: BoxFit.contain,
-            height: 80,
+            height: 100,
           ),
-          Center(
-            child: Text(title,
-                style:
-                    const TextStyle(fontSize: 12, fontWeight: FontWeight.w900)),
-          ),
+          Text(title,
+              style:
+                  const TextStyle(fontSize: 12, fontWeight: FontWeight.w900)),
         ],
       ),
     ),

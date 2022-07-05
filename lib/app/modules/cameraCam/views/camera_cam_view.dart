@@ -38,23 +38,29 @@ class CameraCamView extends GetView<CameraCamController> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Lat : ${controller.locationService.locationData.latitude}'
-                                    .toString(),
-                                style: const TextStyle(
-                                    fontSize: 16, color: Colors.white),
+                              Obx(
+                                () => Text(
+                                  'Lat : ${controller.locationService.locationData.value.latitude}'
+                                      .toString(),
+                                  style: const TextStyle(
+                                      fontSize: 16, color: Colors.white),
+                                ),
                               ),
-                              Text(
-                                'Long : ${controller.locationService.locationData.longitude}'
-                                    .toString(),
-                                style: const TextStyle(
-                                    fontSize: 16, color: Colors.white),
+                              Obx(
+                                () => Text(
+                                  'Long : ${controller.locationService.locationData.value.longitude}'
+                                      .toString(),
+                                  style: const TextStyle(
+                                      fontSize: 16, color: Colors.white),
+                                ),
                               ),
-                              Text(
-                                'Akurasi : ${controller.locationService.locationData.accuracy!.toInt()} m'
-                                    .toString(),
-                                style: const TextStyle(
-                                    fontSize: 16, color: Colors.white),
+                              Obx(
+                                () => Text(
+                                  'Akurasi : ${controller.locationService.locationData.value.accuracy.toInt()} m'
+                                      .toString(),
+                                  style: const TextStyle(
+                                      fontSize: 16, color: Colors.white),
+                                ),
                               ),
                               Obx(
                                 () => Text(

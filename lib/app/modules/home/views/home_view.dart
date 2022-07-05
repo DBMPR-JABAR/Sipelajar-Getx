@@ -33,7 +33,7 @@ class HomeView extends GetView<HomeController> {
                 children: [
                   Obx(() => CarouselSlider(
                       options: CarouselOptions(
-                          height: 200,
+                          height: 180,
                           viewportFraction: 0.7,
                           autoPlay: true,
                           autoPlayInterval: const Duration(seconds: 10),

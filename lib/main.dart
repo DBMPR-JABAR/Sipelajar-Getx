@@ -7,14 +7,13 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sipelajar/app/constant/theme.dart';
-import 'package:sipelajar/app/services/connectivity/connectivity.dart';
-import 'package:sipelajar/app/services/location/location.dart';
 
 import 'app/routes/app_pages.dart';
+import 'app/services/connectivity/connectivity.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await Get.putAsync<ConnectivityService>(() => ConnectivityService().init());
   await GetStorage.init();
   final storage = GetStorage();
   final token = storage.read('accestoken');
@@ -35,14 +34,6 @@ void main() async {
     theme: appTheme,
     getPages: AppPages.routes,
   ));
-  initServices();
-}
-
-void initServices() async {
-  print('starting services ');
-  await Get.putAsync<ConnectivityService>(() => ConnectivityService().init());
-
-  print('All services started');
 }
 
 class Sipelajar extends StatefulWidget {
@@ -75,9 +66,7 @@ Future<void> deleteFile() async {
     if (await file.exists()) {
       await file.delete();
     }
-  } catch (e) {
-    print(e);
-  }
+  } catch (_) {}
 }
 
 class MyHttpOverrides extends HttpOverrides {

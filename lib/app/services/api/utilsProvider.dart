@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -8,9 +10,11 @@ import 'package:sipelajar/app/data/model/api/updateInfoModel.dart';
 import 'package:sipelajar/app/services/connectivity/connectivity.dart';
 
 import '../../helper/config.dart';
+import '../../helper/utils.dart';
+
+final connection = Get.find<ConnectivityService>();
 
 class UtilsProvider {
-  final connection = Get.find<ConnectivityService>();
   static final client = http.Client();
 
   static Future<UpdateInfoModel?> checkUpdate() async {
@@ -25,7 +29,10 @@ class UtilsProvider {
       }
       return null;
     } catch (e) {
-      print(e);
+      if (e is SocketException) {
+        connection.connectionStatus.value = false;
+        showToast('Tidak ada koneksi internet');
+      }
       return null;
     }
   }
@@ -44,8 +51,24 @@ class UtilsProvider {
       }
       return list;
     } catch (e) {
-      print(e);
       return [];
+    }
+  }
+
+  static Future<String> ping() async {
+    try {
+      final response = await client
+          .get(Uri.parse('https://youtube.com'))
+          .timeout(const Duration(seconds: 10),
+              onTimeout: () => throw Exception('Timeout'));
+
+      return '${response.statusCode}';
+    } on TimeoutException catch (_) {
+      return 'timeout';
+    } on SocketException catch (_) {
+      return 'no internet';
+    } on Exception catch (_) {
+      return 'error';
     }
   }
 }

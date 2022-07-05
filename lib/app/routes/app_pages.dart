@@ -1,11 +1,19 @@
 import 'package:get/get.dart';
 
-import 'package:sipelajar/app/modules/cameraCam/bindings/camera_cam_binding.dart';
-import 'package:sipelajar/app/modules/cameraCam/views/camera_cam_view.dart';
+import '../modules/cameraCam/bindings/camera_cam_binding.dart';
+import '../modules/cameraCam/views/camera_cam_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/sapulobang/bindings/sapulobang_binding.dart';
 import '../modules/home/sapulobang/entry_data_lubang/bindings/entry_data_lubang_binding.dart';
 import '../modules/home/sapulobang/entry_data_lubang/views/entry_data_lubang_view.dart';
+import '../modules/home/sapulobang/entry_penanganan/bindings/entry_penanganan_binding.dart';
+import '../modules/home/sapulobang/entry_penanganan/views/entry_penanganan_view.dart';
+import '../modules/home/sapulobang/entry_rencana/bindings/entry_rencana_binding.dart';
+import '../modules/home/sapulobang/entry_rencana/views/entry_rencana_view.dart';
+import '../modules/home/sapulobang/rekap_hasil/bindings/rekap_hasil_binding.dart';
+import '../modules/home/sapulobang/rekap_hasil/views/rekap_hasil_view.dart';
+import '../modules/home/sapulobang/result_survei/bindings/result_survei_binding.dart';
+import '../modules/home/sapulobang/result_survei/views/result_survei_view.dart';
 import '../modules/home/sapulobang/start_survei_lubang/bindings/start_survei_lubang_binding.dart';
 import '../modules/home/sapulobang/start_survei_lubang/views/start_survei_lubang_view.dart';
 import '../modules/home/sapulobang/views/sapulobang_view.dart';
@@ -40,6 +48,26 @@ class AppPages {
                   name: _Paths.ENTRY_DATA_LUBANG,
                   page: () => EntryDataLubangView(),
                   binding: EntryDataLubangBinding(),
+                ),
+                GetPage(
+                  name: _Paths.ENTRY_PENANGANAN,
+                  page: () => const EntryPenangananView(),
+                  binding: EntryPenangananBinding(),
+                ),
+                GetPage(
+                  name: _Paths.RESULT_SURVEI,
+                  page: () => const ResultSurveiView(),
+                  binding: ResultSurveiBinding(),
+                ),
+                GetPage(
+                  name: _Paths.ENTRY_RENCANA,
+                  page: () => const EntryRencanaView(),
+                  binding: EntryRencanaBinding(),
+                ),
+                GetPage(
+                  name: _Paths.REKAP_HASIL,
+                  page: () => const RekapHasilView(),
+                  binding: RekapHasilBinding(),
                 ),
               ]),
         ]),

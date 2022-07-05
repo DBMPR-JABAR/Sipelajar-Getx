@@ -52,26 +52,71 @@ class StartSurveiLubangView extends GetView<StartSurveiLubangController> {
                         dropdownColor: Colors.white,
                         items: controller.dropDownItems))),
                 const SizedBox(height: 10),
-                SizedBox(
-                  width: double.infinity,
-                  child: Obx(() => ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          primary: controller.enableButton.value
-                              ? const Color.fromARGB(255, 245, 193, 7)
-                              : Colors.grey,
-                          splashFactory: controller.enableButton.value
-                              ? null
-                              : NoSplash.splashFactory),
-                      onPressed: () {
-                        controller.enableButton.value
-                            ? controller.startSurvei()
-                            : null;
-                      },
-                      child: const Text('Submit'))),
+                Obx(
+                  () => SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              primary: controller.enableButton.value
+                                  ? const Color.fromARGB(255, 245, 193, 7)
+                                  : Colors.grey,
+                              splashFactory: controller.enableButton.value
+                                  ? null
+                                  : NoSplash.splashFactory),
+                          onPressed: () {
+                            controller.enableButton.value
+                                ? controller.startSurvei()
+                                : null;
+                          },
+                          child: controller.renderChildBtn())),
                 ),
+                if (controller.fromRoute == 'Entry Data Lubang')
+                  Obx(
+                    () => controller.dataPotensiOnline.isEmpty &&
+                            controller.dataSurveiOnline.isEmpty
+                        ? Container()
+                        : SizedBox(
+                            width: double.infinity,
+                            child: Obx(() => ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    splashFactory: controller.enableButton.value
+                                        ? null
+                                        : NoSplash.splashFactory),
+                                onPressed: () {
+                                  controller.showResult();
+                                },
+                                child: const Text('Lihat Hasil Survei'))),
+                          ),
+                  ),
+                if (controller.fromRoute == 'Entry Data Lubang')
+                  Obx(
+                    () => controller.dataPotensiOffline.isEmpty &&
+                            controller.dataSurveiOffline.isEmpty
+                        ? Container()
+                        : SizedBox(
+                            width: double.infinity,
+                            child: Obx(() => ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    splashFactory: controller.enableButton.value
+                                        ? null
+                                        : NoSplash.splashFactory),
+                                onPressed: () {
+                                  controller.enableButton.value
+                                      ? controller.showResultOffline()
+                                      : null;
+                                },
+                                child: const Text('Lihat Draft'))),
+                          ),
+                  )
               ],
             ),
             Obx(() => controller.isLoading.value ? Loading() : Container())
@@ -96,7 +141,7 @@ class StartSurveiLubangView extends GetView<StartSurveiLubangController> {
         children: [
           Obx(
             () => Text(
-              DateFormat("dd-MM-yyyy")
+              DateFormat("yyyy-MM-dd")
                   .format(controller.selectedDate.value)
                   .toString(),
               style: const TextStyle(fontSize: 25),

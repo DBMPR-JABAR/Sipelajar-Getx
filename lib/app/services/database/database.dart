@@ -45,6 +45,29 @@ class DatabaseHelper {
         kd_sup TEXT
         )''',
     );
+
+    await db.execute(
+      ''' 
+      CREATE TABLE draft_lubang(
+        id INTEGER PRIMARY KEY, 
+        tanggal TEXT,
+        ruas_jalan_id TEXT, 
+        jumlah TEXT, 
+        panjang TEXT, 
+        lat TEXT, 
+        long TEXT, 
+        lokasi_kode TEXT, 
+        lokasi_km TEXT, 
+        lokasi_m TEXT, 
+        kategori TEXT, 
+        image TEXT, 
+        lajur TEXT, 
+        kategori_kedalaman TEXT, 
+        keterangan TEXT,
+        potensi_lubang INTEGER,
+        uploaded INTEGER
+        )''',
+    );
   }
 
   Future<void> truncateAllTable() async {
@@ -52,5 +75,6 @@ class DatabaseHelper {
     await database.rawDelete('DELETE FROM user');
     await database.rawDelete('DELETE FROM ruas');
     await database.rawDelete('DELETE FROM data_sup');
+    await database.rawDelete('DELETE FROM draft_lubang');
   }
 }

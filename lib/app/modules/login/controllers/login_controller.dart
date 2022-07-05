@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:sipelajar/app/data/model/local/usermodel.dart';
+import 'package:sipelajar/app/data/model/local/userModel.dart';
 import 'package:sipelajar/app/helper/utils.dart';
 import 'package:sipelajar/app/services/api/authProvider.dart';
+import 'package:sipelajar/app/services/connectivity/connectivity.dart';
 
 import '../../../data/model/local/ruasModel.dart';
 
 class LoginController extends GetxController {
+  final connection = Get.find<ConnectivityService>();
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final storage = GetStorage();
@@ -66,33 +68,39 @@ class LoginController extends GetxController {
 
   void login() async {
     isLoading.value = true;
-    await AuthProvider.login(
-      usernameController.text,
-      passwordController.text,
-    ).then((value) async {
-      isLoading.value = false;
-      if (value.status == 'success') {
-        await storage.write('accestoken', value.data.token!.accessToken);
-        await UserModel(
-                name: value.data.user!.name,
-                email: usernameController.text,
-                password: passwordController.text,
-                token: value.data.token!.accessToken,
-                encryptedId: value.data.user!.encryptedId)
-            .save();
-        List<RuasJalanModel> ruas = [];
-        for (var item in value.data.user!.ruas) {
-          ruas.add(RuasJalanModel(
-              idRuasJalan: item.idRuasJalan,
-              namaRuasJalan: item.namaRuasJalan));
+    var checkConnection = await connection.hasNetwork(false);
+    if (checkConnection == true) {
+      await AuthProvider.login(
+        usernameController.text,
+        passwordController.text,
+      ).then((value) async {
+        if (value.status == 'success') {
+          await storage.write('accestoken', value.data.token!.accessToken);
+          await UserModel(
+                  name: value.data.user!.name,
+                  email: usernameController.text,
+                  password: passwordController.text,
+                  token: value.data.token!.accessToken,
+                  encryptedId: value.data.user!.encryptedId)
+              .save();
+          List<RuasJalanModel> ruas = [];
+          for (var item in value.data.user!.ruas) {
+            ruas.add(RuasJalanModel(
+                idRuasJalan: item.idRuasJalan,
+                namaRuasJalan: item.namaRuasJalan));
+          }
+          await RuasJalanModel.saveMany(ruas);
+          isLoading.value = false;
+          return Get.offAllNamed('/home');
+        } else {
+          usernameError.value = 'Username Salah';
+          passwordError.value = 'Password Salah';
+          showToast('Username atau Password Salah');
         }
-        await RuasJalanModel.saveMany(ruas);
-        return Get.offAllNamed('/home');
-      } else {
-        usernameError.value = 'Username Salah';
-        passwordError.value = 'Password Salah';
-        showToast('Username atau Password Salah');
-      }
-    });
+      });
+    } else {
+      showToast('Tidak ada koneksi internet');
+      isLoading.value = false;
+    }
   }
 }
