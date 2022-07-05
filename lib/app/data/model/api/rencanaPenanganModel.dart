@@ -7,23 +7,25 @@ String rencanaPenanganModelToJson(RencanaPenanganModel data) =>
     json.encode(data.toJson());
 
 class RencanaPenanganModel {
-  RencanaPenanganModel({
-    required this.success,
-    required this.message,
-    required this.dataPerencanaan,
-  });
+  RencanaPenanganModel(
+      {required this.success,
+      required this.message,
+      required this.dataPerencanaan,
+      required this.data});
 
   bool success;
   String message;
   List<DataPerencanaan> dataPerencanaan;
+  List<DataPerencanaan> data;
 
   factory RencanaPenanganModel.fromJson(Map<String, dynamic> json) =>
       RencanaPenanganModel(
-        success: json["success"],
-        message: json["message"],
-        dataPerencanaan: List<DataPerencanaan>.from(
-            json["data_perencanaan"].map((x) => DataPerencanaan.fromJson(x))),
-      );
+          success: json["success"],
+          message: json["message"],
+          dataPerencanaan: List<DataPerencanaan>.from(
+              json["data_perencanaan"].map((x) => DataPerencanaan.fromJson(x))),
+          data: List<DataPerencanaan>.from(
+              json["data"].map((x) => DataPerencanaan.fromJson(x))));
 
   Map<String, dynamic> toJson() => {
         "success": success,
@@ -51,7 +53,7 @@ class DataPerencanaan {
     required this.lokasiKm,
     required this.lokasiM,
     required this.monitoringLubangSurveiId,
-    required this.status,
+    this.status,
     required this.ruasJalanId,
     required this.sup,
     required this.supId,
@@ -75,29 +77,29 @@ class DataPerencanaan {
   int jumlah;
   String panjang;
   String tanggal;
-  String tanggalRencanaPenanganan;
-  dynamic tanggalPenanganan;
+  String? tanggalRencanaPenanganan;
+  String? tanggalPenanganan;
   String image;
-  dynamic imagePenanganan;
+  String? imagePenanganan;
   String lat;
   String long;
   String lokasiKode;
   int lokasiKm;
   int lokasiM;
   int monitoringLubangSurveiId;
-  String status;
+  String? status;
   String ruasJalanId;
   String sup;
   int supId;
   int uptdId;
-  dynamic kotaId;
+  int? kotaId;
   String icon;
   String? description;
   String keterangan;
   String lajur;
   int potensiLubang;
   int createdBy;
-  int updatedBy;
+  int? updatedBy;
   String createdAt;
   String updatedAt;
   UserCreate userCreate;

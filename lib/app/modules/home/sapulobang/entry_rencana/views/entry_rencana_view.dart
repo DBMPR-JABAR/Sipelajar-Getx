@@ -96,6 +96,14 @@ class EntryRencanaView extends GetView<EntryRencanaController> {
                                                 controller.data[index].id
                                                     .toString()),
                                             const SizedBox(height: 10),
+                                            controller.data[index].status ==
+                                                    'Perencanaan'
+                                                ? labelBuilder(
+                                                    'Status',
+                                                    'Dalam ${controller.data[index].status}'
+                                                        .toString())
+                                                : Container(),
+                                            const SizedBox(height: 10),
                                             labelBuilder(
                                                 'Mandor',
                                                 controller.data[index]
@@ -144,39 +152,62 @@ class EntryRencanaView extends GetView<EntryRencanaController> {
                                           child: const Text('Cek Lokasi')),
                                     ),
                                     const SizedBox(width: 10),
-                                    SizedBox(
-                                      width: Get.width * 0.25,
-                                      child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            primary: Colors.red,
-                                          ),
-                                          onPressed: () {
-                                            controller.rejectLubang(
-                                                controller.data[index].id);
-                                          },
-                                          child: const Text('Tolak')),
-                                    ),
+                                    controller.data[index].status !=
+                                            'Perencanaan'
+                                        ? SizedBox(
+                                            width: Get.width * 0.25,
+                                            child: ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                  ),
+                                                  primary: Colors.red,
+                                                ),
+                                                onPressed: () {
+                                                  controller.rejectLubang(
+                                                      controller
+                                                          .data[index].id);
+                                                },
+                                                child: const Text('Tolak')),
+                                          )
+                                        : Container(),
                                     const SizedBox(width: 10),
-                                    SizedBox(
-                                      width: Get.width * 0.25,
-                                      child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            primary: Colors.green,
-                                          ),
-                                          onPressed: () {
-                                            controller.jadwalLubang(
-                                                controller.data[index].id);
-                                          },
-                                          child: const Text('Jadwalkan')),
-                                    ),
+                                    controller.data[index].status !=
+                                            'Perencanaan'
+                                        ? SizedBox(
+                                            width: Get.width * 0.25,
+                                            child: ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                  ),
+                                                  primary: Colors.green,
+                                                ),
+                                                onPressed: () {
+                                                  controller.jadwalLubang(
+                                                      controller
+                                                          .data[index].id);
+                                                },
+                                                child: const Text('Jadwalkan')),
+                                          )
+                                        : SizedBox(
+                                            width: Get.width * 0.4,
+                                            child: ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                  ),
+                                                ),
+                                                onPressed: null,
+                                                child: const Text(
+                                                    'Sudah Dijadwalkan')),
+                                          )
                                   ],
                                 ),
                                 const SizedBox(height: 5),

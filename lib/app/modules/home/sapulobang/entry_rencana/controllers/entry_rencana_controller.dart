@@ -24,7 +24,8 @@ class EntryRencanaController extends GetxController {
     await PerencanaanProvider.getPerencanaan(
             Get.arguments[0].idRuasJalan, Get.arguments[1])
         .then((value) {
-      data.value = value.dataPerencanaan;
+      data.addAll(value.dataPerencanaan);
+      data.addAll(value.data);
     });
   }
 
