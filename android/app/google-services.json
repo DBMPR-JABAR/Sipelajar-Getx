@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1057266603912",
+    "project_id": "sipelajar-b2954",
+    "storage_bucket": "sipelajar-b2954.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1057266603912:android:64c8e64d54ed653adf8c3d",
+        "android_client_info": {
+          "package_name": "com.dbmpr.sipelajar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1057266603912-oquiv22sngrooombtcg741uf2q0t3ggh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaXj7XzEwMaBFmHc7v95O91AHUySPEQk8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1057266603912-oquiv22sngrooombtcg741uf2q0t3ggh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

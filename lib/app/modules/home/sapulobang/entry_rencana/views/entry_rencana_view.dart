@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:sipelajar/app/modules/home/sapulobang/entry_rencana/component/showMaps.dart';
 
 import '../../../../../helper/utils.dart';
@@ -15,7 +14,7 @@ class EntryRencanaView extends GetView<EntryRencanaController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: appBar('assets/images/sapulobang.png'),
+        appBar: appBar('Entry Perencanaan'),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -124,6 +123,12 @@ class EntryRencanaView extends GetView<EntryRencanaController> {
                                             const SizedBox(height: 10),
                                             labelBuilder('Panjang',
                                                 controller.data[index].panjang),
+                                            const SizedBox(height: 10),
+                                            labelBuilder(
+                                                'Dijadwalkan Pada',
+                                                controller.data[index]
+                                                        .tanggalRencanaPenanganan ??
+                                                    'Belum Dijadwalkan'),
                                             const SizedBox(height: 10),
                                           ],
                                         ),

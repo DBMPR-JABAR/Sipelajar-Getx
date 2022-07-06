@@ -12,7 +12,7 @@ import '../../../../../services/api/utilsProvider.dart';
 class ShowMaps extends StatefulWidget {
   const ShowMaps({Key? key, required this.data, required this.ruasJalanId})
       : super(key: key);
-  final DataPerencanaan data;
+  final dynamic data;
   final String ruasJalanId;
   @override
   State<ShowMaps> createState() => _ShowMapsState();

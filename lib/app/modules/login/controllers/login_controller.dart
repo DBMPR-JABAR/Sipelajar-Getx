@@ -81,7 +81,8 @@ class LoginController extends GetxController {
                   email: usernameController.text,
                   password: passwordController.text,
                   token: value.data.token!.accessToken,
-                  encryptedId: value.data.user!.encryptedId)
+                  encryptedId: value.data.user!.encryptedId,
+                  role: value.data.user!.role)
               .save();
           List<RuasJalanModel> ruas = [];
           for (var item in value.data.user!.ruas) {
@@ -93,6 +94,7 @@ class LoginController extends GetxController {
           isLoading.value = false;
           return Get.offAllNamed('/home');
         } else {
+          isLoading.value = false;
           usernameError.value = 'Username Salah';
           passwordError.value = 'Password Salah';
           showToast('Username atau Password Salah');

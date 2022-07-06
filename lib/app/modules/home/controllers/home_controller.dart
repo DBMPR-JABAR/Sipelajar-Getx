@@ -38,16 +38,17 @@ class HomeController extends GetxController
   var progres = 0.obs;
   DownloadTaskStatus statusDowload = DownloadTaskStatus.enqueued;
   var task = "".obs;
-  late UserModel? userModel;
+  var user = UserModel(name: '', email: '', password: '', role: '').obs;
 
   @override
   void onInit() {
+    getUserData();
     permisionFiles();
     tabController =
         TabController(length: listTab.length, vsync: this, initialIndex: 0);
     checkUpdate();
     _bindBackgroundIsolate();
-    getUser();
+
     createWidgetCarousel();
     FlutterDownloader.registerCallback(downloadCallback);
     isLoading.value = false;
@@ -69,9 +70,11 @@ class HomeController extends GetxController
     }
   }
 
-  getUser() async {
-    userModel = await UserModel.getUser();
-    update();
+  getUserData() async {
+    await UserModel.getUser().then((value) {
+      user.value = value!;
+      update();
+    });
   }
 
   checkUpdate() async {
@@ -182,7 +185,7 @@ class HomeController extends GetxController
   Future<void> open() async {
     OpenFile.open(
       '${(await getExternalStorageDirectory())!.path}/Sipelajar.apk',
-    ).then((value) => {});
+    ).then((value) => {logout()});
   }
 
   void retry(String id) {

@@ -1,3 +1,4 @@
+import 'package:sipelajar/app/helper/utils.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../../services/database/database.dart';
@@ -40,12 +41,16 @@ class RuasJalanModel {
 
   static Future<void> saveMany(List<RuasJalanModel> ruasJalan) async {
     final database = await DatabaseHelper.instance.database;
-    for (var i = 0; i < ruasJalan.length; i++) {
-      await database.insert(
-        'ruas',
-        ruasJalan[i].toJson(),
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
+    try {
+      for (var i = 0; i < ruasJalan.length; i++) {
+        await database.insert(
+          'ruas',
+          ruasJalan[i].toJson(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+      }
+    } catch (e) {
+      showToast(e.toString());
     }
   }
 

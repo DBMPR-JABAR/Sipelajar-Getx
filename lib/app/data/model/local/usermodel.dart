@@ -10,6 +10,7 @@ class UserModel {
     required this.password,
     this.token,
     this.encryptedId,
+    required this.role,
   });
 
   final int? id;
@@ -18,6 +19,7 @@ class UserModel {
   final String password;
   final String? token;
   final String? encryptedId;
+  final String role;
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
         id: json['id'] as int?,
@@ -26,6 +28,7 @@ class UserModel {
         password: json['password'] as String,
         token: json['token'] as String?,
         encryptedId: json['encrypted_id'] as String?,
+        role: json['role'] as String,
       );
 
   Map<String, dynamic> toJson() => {
@@ -35,6 +38,7 @@ class UserModel {
         'password': password,
         'token': token,
         'encrypted_id': encryptedId,
+        'role': role,
       };
 
   @override

@@ -36,6 +36,7 @@ class EntryDataLubangController extends GetxController {
   var currentLocation = LatLng(0, 0).obs;
   var interActiveFlags = InteractiveFlag.all;
   Position? currentLocationData;
+  var savedLatLng = LatLng(0, 0).obs;
 
   var kategori = ''.obs;
   var lajur = ''.obs;
@@ -138,18 +139,41 @@ class EntryDataLubangController extends GetxController {
         description: address.value);
   }
 
-  void onImageChange(value) {
+  void onImageChange(value) async {
     image.value = value;
+    await locationService.location.getCurrentPosition().then((value) => {
+          savedLatLng.value = LatLng(value.latitude, value.longitude),
+        });
   }
 
   void onTapCamera() async {
-    currentLocationData = await locationService.location.getCurrentPosition();
-    currentLocation.value =
-        LatLng(currentLocationData!.latitude, currentLocationData!.longitude);
-    Get.toNamed('/camera-cam', arguments: [currentLocation.value])!
-        .then((value) => {
-              onImageChange(value),
-            });
+    if (currentLocationData!.isMocked) {
+      Get.snackbar('Error', 'Anda Menggunakan Lokasi Palsu',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          borderRadius: 10,
+          margin: const EdgeInsets.all(10),
+          snackStyle: SnackStyle.FLOATING);
+      return null;
+    } else if (currentLocationData!.accuracy > 35) {
+      Get.snackbar('Error', 'Lokasi Tidak Akurat Harap Lakukan Calibrasi',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          borderRadius: 10,
+          margin: const EdgeInsets.all(10),
+          snackStyle: SnackStyle.FLOATING);
+      return null;
+    } else {
+      currentLocationData = await locationService.location.getCurrentPosition();
+      currentLocation.value =
+          LatLng(currentLocationData!.latitude, currentLocationData!.longitude);
+      Get.toNamed('/camera-cam', arguments: [currentLocation.value])!
+          .then((value) => {
+                onImageChange(value),
+              });
+    }
   }
 
   validate() {
@@ -331,8 +355,8 @@ class EntryDataLubangController extends GetxController {
           "ruas_jalan_id": Get.arguments[0].idRuasJalan,
           "jumlah": jumlahLubang.text,
           "panjang": panjangLubang.text,
-          "lat": currentLocationData!.latitude.toString(),
-          "long": currentLocationData!.longitude.toString(),
+          "lat": savedLatLng.value.latitude.toString(),
+          "long": savedLatLng.value.longitude.toString(),
           "lokasi_kode": sta.text,
           "lokasi_km": km1.text,
           "lokasi_m": km2.text,
@@ -391,8 +415,8 @@ class EntryDataLubangController extends GetxController {
             tanggal: tanggal.text,
             jumlah: kategori.value == 'Group' ? jumlahLubang.text : '1',
             panjang: double.parse(panjangLubang.text).toString(),
-            lat: currentLocationData!.latitude.toString(),
-            long: currentLocationData!.longitude.toString(),
+            lat: savedLatLng.value.latitude.toString(),
+            long: savedLatLng.value.longitude.toString(),
             lokasiKode: sta.text,
             lokasiKm: km1.text,
             lokasiM: km2.text,

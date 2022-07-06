@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:camera/camera.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_storage/get_storage.dart';
+import 'package:sipelajar/app/data/model/api/rekapResponseModel.dart';
 import 'package:sipelajar/app/data/model/api/startSurverResponModel.dart';
 import 'package:sipelajar/app/helper/utils.dart';
 
@@ -87,6 +88,25 @@ class SurveiProvider {
       showToast('Tidak ada Koneksi Internet / Internet Tidak Stable');
 
       return 'false';
+    }
+  }
+
+  static Future<RekapResponseModel?> rekapSurvei() async {
+    try {
+      final response = await client.get(
+        Config.rekapData,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $accestoken',
+        },
+      ).timeout(const Duration(seconds: 5));
+      print(response.body);
+      return rekapResponseModelFromJson(response.body);
+    } catch (e) {
+      print(e);
+      showToast('Tidak ada Koneksi Internet / Internet Tidak Stable');
+      return null;
     }
   }
 }
