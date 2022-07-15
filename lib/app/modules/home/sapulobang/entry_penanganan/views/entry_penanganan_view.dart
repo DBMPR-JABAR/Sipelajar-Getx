@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:get/get.dart';
-import 'package:sipelajar/app/modules/home/sapulobang/entry_rencana/component/previewImage.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../../../../../helper/loading.dart';
 import '../../../../../helper/utils.dart';
 import '../../../component/appbar.dart';
-import '../../entry_rencana/component/showMaps.dart';
+import '../../../component/previewImage.dart';
 import '../controllers/entry_penanganan_controller.dart';
 
 class EntryPenangananView extends GetView<EntryPenangananController> {
@@ -33,7 +33,7 @@ class EntryPenangananView extends GetView<EntryPenangananController> {
                         color: Color.fromARGB(255, 230, 228, 228),
                         spreadRadius: 0,
                         blurRadius: 5,
-                        offset: Offset(4, 8), // changes position of shadow
+                        offset: Offset(4, 8), //changes position of shadow
                       ),
                     ],
                   ),
@@ -108,11 +108,11 @@ class EntryPenangananView extends GetView<EntryPenangananController> {
                                               const SizedBox(height: 10),
                                               labelBuilder(
                                                   'Mandor',
-                                                  controller.data[index]
-                                                      .userCreate.name),
+                                                  controller
+                                                      .data[index].createdBy),
                                               const SizedBox(height: 10),
                                               labelBuilder('Lokasi',
-                                                  ' KM.${controller.data[index].lokasiKode}. ${controller.data[index].lokasiKm} - ${controller.data[index].lokasiM}'),
+                                                  ' KM.${controller.data[index].lokasiKode}. ${controller.data[index].lokasiKm} + ${controller.data[index].lokasiM}'),
                                               const SizedBox(height: 10),
                                               labelBuilder(
                                                   'Kategori',
@@ -134,10 +134,15 @@ class EntryPenangananView extends GetView<EntryPenangananController> {
                                                   controller.data[index]
                                                       .tanggalRencanaPenanganan!),
                                               const SizedBox(height: 10),
-                                              // Obx(() => labelBuilder(
-                                              //     'Jarak Ke Lokasi',
-                                              //     '${(Geolocator.distanceBetween(controller.currentPosition.value.latitude, controller.currentPosition.value.longitude, double.parse(controller.data[index].lat), double.parse(controller.data[index].long)) / 1000).toStringAsFixed(2)} KM')),
-                                              // const SizedBox(height: 10),
+                                              Obx(() => labelBuilder(
+                                                  'Jarak Ke Lokasi',
+                                                  getDistance(LatLng(
+                                                      double.parse(controller
+                                                          .data[index].lat),
+                                                      double.parse(controller
+                                                          .data[index]
+                                                          .long))))),
+                                              const SizedBox(height: 10),
                                             ],
                                           ),
                                         ),
@@ -181,9 +186,8 @@ class EntryPenangananView extends GetView<EntryPenangananController> {
                                                     primary: Colors.green,
                                                   ),
                                                   onPressed: () {
-                                                    controller.jadwalLubang(
-                                                        controller
-                                                            .data[index].id);
+                                                    controller.penanganan(
+                                                        controller.data[index]);
                                                   },
                                                   child: const Text('Tangani')),
                                             )
@@ -220,5 +224,22 @@ class EntryPenangananView extends GetView<EntryPenangananController> {
           ),
           Obx(() => controller.isLoading.value ? Loading() : Container())
         ]));
+  }
+
+  String getDistance(LatLng latLng) {
+    try {
+      var distance = Geolocator.distanceBetween(
+          controller.currentLocationData.value.latitude,
+          controller.currentLocationData.value.longitude,
+          latLng.latitude,
+          latLng.longitude);
+      if (distance < 1000) {
+        return '${distance.toStringAsFixed(1)} M';
+      } else {
+        return '${(distance / 1000).toStringAsFixed(1)} KM';
+      }
+    } catch (e) {
+      return 'Lokalisasi tidak ditemukan';
+    }
   }
 }

@@ -11,6 +11,18 @@ class Config {
   static String rejectLobang = '$baseUrl/sapu-lubang/data-lubang/reject';
   static String jadwalLubang = '$baseUrl/rencana-penanganan-lubang/execute';
   static Uri listPenanganan = Uri.parse('$baseUrl/penanganan-lubang/list');
+  static String excutePenanganan = '$baseUrl/penanganan-lubang/execute';
   static Uri rekapData = Uri.parse('$baseUrl/sapu-lubang/rekapitulasi');
-  static Uri listNews = Uri.parse('$baseUrl/news/show/aplikasi-sapu-lobang');
+  static Uri rekapLubang =
+      Uri.parse('$baseUrl/sapu-lubang/list/lubang/belum_ditangani');
+  static Uri rekapPotensi = Uri.parse('$baseUrl/sapu-lubang/list/potensi/show');
+  static Uri rekapDalamPerencanaan =
+      Uri.parse('$baseUrl/sapu-lubang/list/lubang/dalam_perencanaan');
+  static Uri rekapSelesai =
+      Uri.parse('$baseUrl/sapu-lubang/list/lubang/sudah_ditangani');
+  static Uri listNews = Uri.parse('$baseUrl/news/for-slider');
+  static Uri listDraftPenanganan =
+      Uri.parse('$baseUrl/penanganan-lubang/list_by_user');
+  static String deleteLubang = '$baseUrl/survei-lubang/delete';
+  static String deletePotensiLubang = '$baseUrl/survei-potensi-lubang/delete';
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sipelajar/app/data/model/api/resultSurveiModel.dart';
+import 'package:sipelajar/app/helper/utils.dart';
 import 'package:sipelajar/app/services/api/utilsProvider.dart';
 
 import '../../../../../data/model/local/entryLubangModel.dart';
@@ -20,21 +21,28 @@ class StartSurveiLubangController extends GetxController {
   var dataSurveiOffline = <EntryLubangModel>[].obs;
   var dataPotensiOnline = <SurveiILubangDetail>[].obs;
   var dataPotensiOffline = <EntryLubangModel>[].obs;
+  late LocationService locationService;
   @override
   void onInit() {
     iniLocationService();
+
     getDataRuas();
     super.onInit();
   }
 
   iniLocationService() async {
     await Get.putAsync<LocationService>(() => LocationService().init());
-
-    isLoading.value = false;
+    locationService = Get.find<LocationService>();
+    var checkService =
+        await locationService.location.isLocationServiceEnabled();
+    if (!checkService) {
+      enableButton.value = false;
+    }
   }
 
   void getDataSurvei() async {
-    if (fromRoute == 'Entry Data Lubang') {
+    if (fromRoute == 'Entry Data Lubang' &&
+        selectedRuas.value.idRuasJalan != '') {
       isLoading.value = true;
       dataPotensiOnline.clear();
       dataSurveiOnline.clear();
@@ -101,44 +109,58 @@ class StartSurveiLubangController extends GetxController {
   }
 
   dropDownOnchange(RuasJalanModel value) async {
+    var checkService =
+        await locationService.location.isLocationServiceEnabled();
+    if (checkService) {
+      enableButton.value = true;
+    } else {
+      showToast('Please enable location service');
+      enableButton.value = false;
+    }
     selectedRuas.value = value;
-    enableButton.value = true;
+
     getDataSurvei();
   }
 
   void startSurvei() async {
     if (fromRoute == 'Entry Data Lubang') {
-      Get.toNamed('/home/sapulobang/entry-data-lubang', arguments: [
+      Get.toNamed('/home/entry-data-lubang', arguments: [
         selectedRuas.value,
         selectedDate.value.toString(),
       ])!
           .then((value) => getDataSurvei());
     } else if (fromRoute == 'Entry Penanganan') {
-      Get.toNamed('/home/sapulobang/entry-penanganan',
+      Get.toNamed('/home/entry-penanganan',
               arguments: [selectedRuas.value, selectedDate.value.toString()])!
           .then((value) => getDataSurvei());
     } else {
-      Get.toNamed('/home/sapulobang/entry-rencana',
+      Get.toNamed('/home/entry-rencana',
           arguments: [selectedRuas.value, selectedDate.value.toString()]);
     }
   }
 
   void showResult() {
-    Get.toNamed('/home/sapulobang/result-survei', arguments: [
+    Get.toNamed('/home/result-survei', arguments: [
       dataSurveiOnline,
       dataPotensiOnline,
       '${selectedRuas.value.namaRuasJalan} - ${selectedRuas.value.idRuasJalan}',
-      ''
-    ]);
+      '',
+      selectedRuas.value.idRuasJalan,
+      selectedDate.value.toString().substring(0, 10),
+    ])!
+        .then((value) => getDataSurvei());
   }
 
   void showResultOffline() {
-    Get.toNamed('/home/sapulobang/result-survei', arguments: [
+    Get.toNamed('/home/result-survei', arguments: [
       dataSurveiOffline,
       dataPotensiOffline,
       '${selectedRuas.value.namaRuasJalan} - ${selectedRuas.value.idRuasJalan}',
-      'Offline'
-    ]);
+      'Offline',
+      selectedRuas.value.idRuasJalan,
+      selectedDate.value.toString().substring(0, 10),
+    ])!
+        .then((value) => getDataSurvei());
   }
 
   Text renderChildBtn() {

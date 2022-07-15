@@ -36,21 +36,24 @@ class StartSurveiLubangView extends GetView<StartSurveiLubangController> {
                       ),
                       color: const Color(0xFFe3e3e3),
                     ),
-                    child: Obx(() => DropdownButton<RuasJalanModel>(
-                        isExpanded: true,
-                        hint: const Text('Pilih Ruas'),
-                        elevation: 50,
-                        value: controller.selectedRuas.value.idRuasJalan == ''
-                            ? null
-                            : controller.selectedRuas.value,
-                        underline: Container(
-                          height: 2,
-                        ),
-                        onChanged: (value) {
-                          controller.dropDownOnchange(value!);
-                        },
-                        dropdownColor: Colors.white,
-                        items: controller.dropDownItems))),
+                    child: Obx(() => controller.dropDownItems.isEmpty
+                        ? const Text('Tidak ada data')
+                        : DropdownButton<RuasJalanModel>(
+                            isExpanded: true,
+                            hint: const Text('Pilih Ruas'),
+                            elevation: 50,
+                            value:
+                                controller.selectedRuas.value.idRuasJalan == ''
+                                    ? null
+                                    : controller.selectedRuas.value,
+                            underline: Container(
+                              height: 2,
+                            ),
+                            onChanged: (value) {
+                              controller.dropDownOnchange(value!);
+                            },
+                            dropdownColor: Colors.white,
+                            items: controller.dropDownItems))),
                 const SizedBox(height: 10),
                 Obx(
                   () => SizedBox(
@@ -116,7 +119,7 @@ class StartSurveiLubangView extends GetView<StartSurveiLubangController> {
                                 },
                                 child: const Text('Lihat Draft'))),
                           ),
-                  )
+                  ),
               ],
             ),
             Obx(() => controller.isLoading.value ? Loading() : Container())

@@ -17,14 +17,12 @@ import 'app/services/database/database.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await GetStorage.init();
   await Firebase.initializeApp();
   FCM().setNotifications();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await DatabaseHelper.instance.database.then((value) => print(value));
   await Get.putAsync<ConnectivityService>(() => ConnectivityService().init());
-  await GetStorage.init();
-  final storage = GetStorage();
-  final token = storage.read('accestoken');
   HttpOverrides.global = MyHttpOverrides();
   await FlutterDownloader.initialize(
       debug:
@@ -34,14 +32,7 @@ void main() async {
       );
 
   deleteFile();
-  runApp(GetMaterialApp(
-    enableLog: true,
-    debugShowCheckedModeBanner: false,
-    title: "Sipelajar",
-    initialRoute: token == null ? '/login' : '/home',
-    theme: appTheme,
-    getPages: AppPages.routes,
-  ));
+  runApp(const Sipelajar());
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -57,10 +48,9 @@ class Sipelajar extends StatefulWidget {
 }
 
 class _SipelajarState extends State<Sipelajar> {
-  final storage = GetStorage();
-
   @override
   Widget build(BuildContext context) {
+    final storage = GetStorage();
     final token = storage.read('accestoken');
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,

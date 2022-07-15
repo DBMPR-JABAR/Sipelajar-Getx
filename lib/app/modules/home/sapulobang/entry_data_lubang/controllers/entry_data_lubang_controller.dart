@@ -12,6 +12,7 @@ import 'package:map_launcher/map_launcher.dart' as laucher_maps;
 import 'package:permission_handler/permission_handler.dart'
     as permision_handler;
 import 'package:sipelajar/app/data/model/local/entryLubangModel.dart';
+import 'package:sipelajar/app/helper/utils.dart';
 import 'package:sipelajar/app/services/connectivity/connectivity.dart';
 import 'package:sipelajar/app/services/location/location.dart';
 import 'package:path_provider/path_provider.dart';
@@ -77,11 +78,10 @@ class EntryDataLubangController extends GetxController {
     var serviceEnabled =
         await locationService.location.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      serviceEnabled = await locationService.location.openLocationSettings();
-      if (!serviceEnabled) {
-        serviceEnabled = await locationService.location.openLocationSettings();
-      }
+      showToast('Please enable location service');
+      Get.back();
     }
+
     currentLocationData = await locationService.location.getCurrentPosition();
     currentLocation.value =
         LatLng(currentLocationData!.latitude, currentLocationData!.longitude);
@@ -156,7 +156,7 @@ class EntryDataLubangController extends GetxController {
           margin: const EdgeInsets.all(10),
           snackStyle: SnackStyle.FLOATING);
       return null;
-    } else if (currentLocationData!.accuracy > 35) {
+    } else if (currentLocationData!.accuracy > 100) {
       Get.snackbar('Error', 'Lokasi Tidak Akurat Harap Lakukan Calibrasi',
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.red,
@@ -169,10 +169,9 @@ class EntryDataLubangController extends GetxController {
       currentLocationData = await locationService.location.getCurrentPosition();
       currentLocation.value =
           LatLng(currentLocationData!.latitude, currentLocationData!.longitude);
-      Get.toNamed('/camera-cam', arguments: [currentLocation.value])!
-          .then((value) => {
-                onImageChange(value),
-              });
+      Get.toNamed('/camera-cam')!.then((value) => {
+            onImageChange(value),
+          });
     }
   }
 
@@ -297,18 +296,8 @@ class EntryDataLubangController extends GetxController {
           borderColor: Colors.red,
           borderWidth: 1);
       return false;
-    } else if (currentLocationData!.latitude == 0) {
+    } else if (savedLatLng.value.latitude == 0) {
       Get.snackbar('Error', 'Lokasi Tidak Ditemukan',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-          borderRadius: 10,
-          margin: const EdgeInsets.all(10),
-          borderColor: Colors.red,
-          borderWidth: 1);
-      return false;
-    } else if (currentLocationData!.accuracy > 50) {
-      Get.snackbar('Error', 'Lokasi Tidak Akurat',
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.red,
           colorText: Colors.white,
@@ -410,6 +399,7 @@ class EntryDataLubangController extends GetxController {
     String fileFormat = image.value.path.split('.').last;
     String fileName = '${DateTime.now().millisecondsSinceEpoch}.$fileFormat';
     File(image.value.path).copy('$pathStoreImage/$fileName');
+    print('$pathStoreImage/$fileName');
     await EntryLubangModel(
             ruasJalanId: Get.arguments[0].idRuasJalan,
             tanggal: tanggal.text,

@@ -12,19 +12,85 @@ class HomeView extends GetView<HomeController> {
     return SafeArea(
       child: Scaffold(
           appBar: AppBar(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Image.asset(
-                  'assets/images/logo-sp2.png',
-                  fit: BoxFit.contain,
-                  height: 45,
-                ),
-                IconButton(
-                    onPressed: () => controller.logout(),
-                    icon: const Icon(Icons.exit_to_app)),
-              ],
+            title: Image.asset(
+              'assets/images/logo-sp2.png',
+              fit: BoxFit.contain,
+              height: 45,
             ),
+          ),
+          endDrawer: Drawer(
+            width: MediaQuery.of(context).size.width * 0.7,
+            child: Stack(children: [
+              ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  DrawerHeader(
+                    decoration: const BoxDecoration(
+                        color: Color(0xFF161E29),
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/logo-sp2.png'),
+                          fit: BoxFit.contain,
+                        )),
+                    child: Container(),
+                  ),
+                  Column(
+                    children: [
+                      Obx(() => ListTile(
+                            title: Text('Hallo, ${controller.user.value.name}'),
+                            onTap: () {
+                              Get.toNamed('/profile');
+                            },
+                          )),
+                      Card(
+                        child: ListTile(
+                          leading: const Icon(Icons.map),
+                          title: const Text('Maps'),
+                          onTap: () {
+                            Get.offAllNamed('/maps');
+                          },
+                        ),
+                      ),
+                      Card(
+                        child: ListTile(
+                          leading: const Icon(Icons.info),
+                          title: const Text('About'),
+                          onTap: () {
+                            Get.offAllNamed('/about');
+                          },
+                        ),
+                      ),
+                      Card(
+                        child: ListTile(
+                          leading: const Icon(Icons.exit_to_app),
+                          title: const Text('Logout'),
+                          onTap: () {
+                            controller.logout();
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Positioned(
+                  bottom: 0,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    height: 50,
+                    color: Colors.grey[200],
+                    child: Obx(
+                      () => Center(
+                        child: Text(
+                          'Version ${controller.version.value}',
+                          style: const TextStyle(
+                              color: Color.fromARGB(255, 114, 113, 113),
+                              fontSize: 18,
+                              fontWeight: FontWeight.w400),
+                        ),
+                      ),
+                    ),
+                  )),
+            ]),
           ),
           body: Stack(
             children: [
@@ -86,20 +152,20 @@ class HomeView extends GetView<HomeController> {
       crossAxisSpacing: 10,
       children: [
         createItemMenu('Entry Data Lubang', 'assets/icons/img_entry_lubang.png',
-            '/home/sapulobang/start-survei-lubang'),
+            '/home/start-survei-lubang'),
         if (controller.user.value.role.contains('Kepala') ||
             controller.user.value.role.contains('Admin') ||
             controller.user.value.role.contains('internal'))
           createItemMenu(
               'Entry Rencana Penanganan',
               'assets/icons/img_entry_rencana.png',
-              '/home/sapulobang/start-survei-lubang'),
+              '/home/start-survei-lubang'),
         createItemMenu(
             'Entry Penanganan',
             'assets/icons/img_entry_penanganan.png',
-            '/home/sapulobang/start-survei-lubang'),
+            '/home/start-survei-lubang'),
         createItemMenu('Rekap Hasil Surveri', 'assets/icons/img_rekap.png',
-            '/home/sapulobang/rekap-hasil')
+            '/home/rekap-hasil')
       ],
     );
   }

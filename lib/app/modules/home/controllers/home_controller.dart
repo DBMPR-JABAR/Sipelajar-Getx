@@ -4,8 +4,12 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:sipelajar/app/data/model/api/newsResponseModel.dart';
 import 'package:sipelajar/app/data/model/local/userModel.dart';
 import 'package:sipelajar/app/helper/utils.dart';
+import 'package:sipelajar/app/modules/home/component/newsDetail.dart';
+import 'package:sipelajar/app/services/api/penangananProvider.dart';
 import 'package:sipelajar/app/services/api/utilsProvider.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
@@ -13,22 +17,20 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:open_file/open_file.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
+import '../../../data/model/api/draftPenangananResponseModel.dart';
+import '../../../data/model/local/entryLubangModel.dart';
 import '../../../services/database/database.dart';
+import 'package:restart_app/restart_app.dart';
 
 class HomeController extends GetxController
     with GetSingleTickerProviderStateMixin {
   final storage = GetStorage();
   late TabController tabController;
-  List<String> carouselData = [
-    'https://tj.temanjabar.net/storage/50/WhatsApp-Image-2022-06-23-at-12.18.00.jpeg',
-    'https://tj.temanjabar.net/storage/49/WhatsApp-Image-2022-06-17-at-15.48.27-(4).jpeg',
-    'https://tj.temanjabar.net/storage/48/WhatsApp-Image-2022-06-17-at-15.46.39.jpeg',
-    'https://tj.temanjabar.net/storage/46/WhatsApp-Image-2022-06-09-at-13.08.32.jpeg',
-    'https://tj.temanjabar.net/storage/43/WhatsApp-Image-2022-06-03-at-09.37.10.jpeg',
-    'https://tj.temanjabar.net/storage/25/Morning-Routine-Neutral-Photo-Collage.png',
-  ];
-  var carouselList = <Widget>[].obs;
   var isLoading = true.obs;
+  var carouselList = <Widget>[].obs;
+
+  var newsDataList = <NewsData>[].obs;
+  bool enableSignOut = false;
 
   List<Widget> listTab = [
     const Tab(text: 'Sapu Lobang'),
@@ -39,17 +41,18 @@ class HomeController extends GetxController
   DownloadTaskStatus statusDowload = DownloadTaskStatus.enqueued;
   var task = "".obs;
   var user = UserModel(name: '', email: '', password: '', role: '').obs;
+  var version = "".obs;
 
   @override
   void onInit() {
+    syncDatabase();
+    getNewsData();
     getUserData();
     permisionFiles();
     tabController =
         TabController(length: listTab.length, vsync: this, initialIndex: 0);
     checkUpdate();
     _bindBackgroundIsolate();
-
-    createWidgetCarousel();
     FlutterDownloader.registerCallback(downloadCallback);
     isLoading.value = false;
     super.onInit();
@@ -70,16 +73,53 @@ class HomeController extends GetxController
     }
   }
 
+  void syncDatabase() async {
+    PackageInfo info = await PackageInfo.fromPlatform();
+    version.value = info.version;
+    if (connection.connectionStatus.value) {
+      await PenangananProvider.getDraftPenanganan().then((value) async {
+        if (value == null) {
+        } else {
+          await DataPenanganFromServer.saveMany(value.dataPenanganan);
+          showToast('Data berhasil disinkronisasi');
+        }
+      });
+    }
+
+    var dataPenanganan =
+        await DataPenanganFromServer.getDataUpdated().then((value) {
+      print(value);
+      return value.length;
+    });
+    var dataLubang =
+        await EntryLubangModel.getAllData().then((value) => value.length);
+
+    if (dataPenanganan == 0 && dataLubang == 0) {
+      enableSignOut = true;
+    }
+  }
+
+  void getNewsData() async {
+    await UtilsProvider.getNews().then((value) async {
+      value == null ? null : newsDataList.value = value.data;
+    });
+    carouselList.value = newsDataList.map((e) => createWidget(e)).toList().obs;
+  }
+
   getUserData() async {
     await UserModel.getUser().then((value) {
-      user.value = value!;
+      if (value != null) {
+        user.value = value;
+      } else {
+        showToast('Sesi anda telah berakhir, silahkan login kembali');
+      }
       update();
     });
   }
 
   checkUpdate() async {
     await UtilsProvider.checkUpdate().then((value) => {
-          if (value != null)
+          if (value != null && enableSignOut)
             {
               Get.dialog(
                 AlertDialog(
@@ -185,7 +225,7 @@ class HomeController extends GetxController
   Future<void> open() async {
     OpenFile.open(
       '${(await getExternalStorageDirectory())!.path}/Sipelajar.apk',
-    ).then((value) => {logout()});
+    ).then((value) => {});
   }
 
   void retry(String id) {
@@ -217,11 +257,7 @@ class HomeController extends GetxController
     IsolateNameServer.removePortNameMapping('downloader_send_port');
   }
 
-  void createWidgetCarousel() {
-    carouselList = carouselData.map((e) => createWidget(e)).toList().obs;
-  }
-
-  Container createWidget(dynamic data) {
+  Container createWidget(NewsData data) {
     return Container(
       margin: const EdgeInsets.all(10),
       child: ClipRRect(
@@ -230,7 +266,7 @@ class HomeController extends GetxController
             children: [
               InkWell(
                 child: CachedNetworkImage(
-                  imageUrl: data,
+                  imageUrl: data.pathUrl,
                   errorWidget: (context, url, error) {
                     return const Icon(Icons.error);
                   },
@@ -244,6 +280,11 @@ class HomeController extends GetxController
                   width: Get.width,
                   height: Get.height / 2.5,
                 ),
+                onTap: () {
+                  Get.to(() => NewsDetail(
+                        newsData: data,
+                      ));
+                },
               ),
               Positioned(
                 bottom: 0,
@@ -251,11 +292,11 @@ class HomeController extends GetxController
                 right: 0,
                 child: Container(
                   padding: const EdgeInsets.all(10),
-                  child: const Text(
-                    'dummy text',
-                    style: TextStyle(
+                  child: Text(
+                    data.title,
+                    style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 20,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -265,9 +306,20 @@ class HomeController extends GetxController
     );
   }
 
-  logout() async {
-    await storage.erase();
-    await DatabaseHelper.instance.truncateAllTable();
-    Get.offAllNamed('/login');
+  void logout() async {
+    var dataPenanganan =
+        await DataPenanganFromServer.getDataUpdated().then((value) {
+      return value.length;
+    });
+    var dataLubang =
+        await EntryLubangModel.getAllData().then((value) => value.length);
+
+    if (dataPenanganan == 0 && dataLubang == 0) {
+      await storage.remove('accestoken');
+      await DatabaseHelper.instance.truncateAllTable();
+      Restart.restartApp();
+    } else {
+      showToast('Masih Ada Data Yang Belum Diupload');
+    }
   }
 }

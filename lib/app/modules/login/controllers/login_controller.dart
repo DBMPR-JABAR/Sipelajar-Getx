@@ -74,7 +74,10 @@ class LoginController extends GetxController {
         usernameController.text,
         passwordController.text,
       ).then((value) async {
-        if (value.status == 'success') {
+        if (value == null) {
+          isLoading.value = false;
+          showToast('Terjadi kesalahan, silahkan coba lagi');
+        } else if (value.status == 'success') {
           await storage.write('accestoken', value.data.token!.accessToken);
           await UserModel(
                   name: value.data.user!.name,
@@ -90,9 +93,9 @@ class LoginController extends GetxController {
                 idRuasJalan: item.idRuasJalan,
                 namaRuasJalan: item.namaRuasJalan));
           }
-          await RuasJalanModel.saveMany(ruas);
-          isLoading.value = false;
-          return Get.offAllNamed('/home');
+          await RuasJalanModel.saveMany(ruas).then((value) => {
+                Get.offAllNamed('/home'),
+              });
         } else {
           isLoading.value = false;
           usernameError.value = 'Username Salah';

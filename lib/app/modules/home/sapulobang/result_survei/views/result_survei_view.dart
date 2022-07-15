@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:sipelajar/app/modules/home/sapulobang/result_survei/component/detailResult.dart';
+import 'package:sipelajar/app/modules/home/component/showMaps.dart';
 
 import '../../../../../data/model/api/resultSurveiModel.dart';
 import '../../../../../data/model/local/entryLubangModel.dart';
@@ -127,8 +127,10 @@ class ResultSurveiView extends GetView<ResultSurveiController> {
                                       ),
                                     ),
                                     onPressed: () {
-                                      Get.to(() => DetailResult(
-                                            dataOffile: data[index],
+                                      Get.to(() => ShowMaps(
+                                            dataLobangOffline: data[index],
+                                            ruasJalanId:
+                                                data[index].ruasJalanId,
                                           ));
                                     },
                                     child: const Text('Detail')),
@@ -140,7 +142,9 @@ class ResultSurveiView extends GetView<ResultSurveiController> {
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      controller.deleteLobang(data[index].id!);
+                                    },
                                     child: const Text('Hapus')),
                               ],
                             )
@@ -189,7 +193,7 @@ class ResultSurveiView extends GetView<ResultSurveiController> {
                             borderRadius: BorderRadius.circular(10),
                             image: DecorationImage(
                               image: CachedNetworkImageProvider(
-                                  'http://173.103.11.101/temanjabar/public/map-dashboard/intervention-mage/${data[index].image}'),
+                                  'https://tj.temanjabar.net/map-dashboard/intervention-mage/${data[index].image}'),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -227,21 +231,30 @@ class ResultSurveiView extends GetView<ResultSurveiController> {
                                       ),
                                     ),
                                     onPressed: () {
-                                      Get.to(() => DetailResult(
-                                            dataOnline: data[index],
+                                      Get.to(() => ShowMaps(
+                                            dataLobang: data[index],
+                                            ruasJalanId:
+                                                data[index].ruasJalanId,
                                           ));
                                     },
                                     child: const Text('Detail')),
                                 const SizedBox(width: 10),
-                                ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      primary: Colors.red,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    ),
-                                    onPressed: () {},
-                                    child: const Text('Hapus')),
+                                data[index].status == 'Perencanaan' ||
+                                        data[index].status == 'Selesai'
+                                    ? Container()
+                                    : ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          primary: Colors.red,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          controller
+                                              .deleteLobang(data[index].id);
+                                        },
+                                        child: const Text('Hapus')),
                               ],
                             )
                           ],

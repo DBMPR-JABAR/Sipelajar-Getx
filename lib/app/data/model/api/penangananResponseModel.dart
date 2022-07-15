@@ -68,8 +68,6 @@ class DataPenangan {
     required this.potensiLubang,
     required this.createdBy,
     required this.updatedBy,
-    required this.createdAt,
-    required this.updatedAt,
     required this.userCreate,
     required this.ruas,
   });
@@ -81,30 +79,28 @@ class DataPenangan {
   String panjang;
   String? tanggal;
   String? tanggalRencanaPenanganan;
-  dynamic tanggalPenanganan;
+  String? tanggalPenanganan;
   String image;
-  dynamic imagePenanganan;
+  String? imagePenanganan;
   String lat;
   String long;
   String lokasiKode;
   int lokasiKm;
   int lokasiM;
   int monitoringLubangSurveiId;
-  String status;
+  String? status;
   String ruasJalanId;
-  String sup;
+  String? sup;
   int supId;
   int uptdId;
-  int kotaId;
+  int? kotaId;
   String icon;
-  String description;
-  String keterangan;
+  String? description;
+  String? keterangan;
   String lajur;
-  int potensiLubang;
+  int? potensiLubang;
   int createdBy;
   int updatedBy;
-  String createdAt;
-  String updatedAt;
   UserCreate userCreate;
   Ruas ruas;
 
@@ -138,8 +134,6 @@ class DataPenangan {
         potensiLubang: json["potensi_lubang"],
         createdBy: json["created_by"],
         updatedBy: json["updated_by"],
-        createdAt: json["created_at"],
-        updatedAt: json["updated_at"],
         userCreate: UserCreate.fromJson(json["user_create"]),
         ruas: Ruas.fromJson(json["ruas"]),
       );
@@ -174,8 +168,6 @@ class DataPenangan {
         "potensi_lubang": potensiLubang,
         "created_by": createdBy,
         "updated_by": updatedBy,
-        "created_at": createdAt,
-        "updated_at": updatedAt,
         "user_create": userCreate.toJson(),
         "ruas": ruas.toJson(),
       };
@@ -183,141 +175,21 @@ class DataPenangan {
 
 class Ruas {
   Ruas({
-    required this.id,
     required this.idRuasJalan,
     required this.namaRuasJalan,
-    required this.sup,
-    required this.lokasi,
-    required this.panjang,
-    required this.staAwal,
-    required this.staAkhir,
-    required this.latAwal,
-    required this.longAwal,
-    required this.latAkhir,
-    required this.longAkhir,
-    required this.l,
-    required this.kabKota,
-    required this.kotaId,
-    required this.kdSppjj,
-    required this.nmSppjj,
-    required this.latCtr,
-    required this.longCtr,
-    required this.wilUptd,
-    required this.uptdId,
-    required this.createdDate,
-    required this.createdBy,
-    required this.updatedDate,
-    required this.updatedBy,
-    required this.foto,
-    required this.foto1,
-    required this.foto2,
-    required this.video,
-    required this.index,
-    required this.createdAt,
-    required this.updatedAt,
   });
 
-  int id;
   String idRuasJalan;
   String namaRuasJalan;
-  dynamic sup;
-  dynamic lokasi;
-  int panjang;
-  String staAwal;
-  String staAkhir;
-  double latAwal;
-  double longAwal;
-  double latAkhir;
-  double longAkhir;
-  dynamic l;
-  String kabKota;
-  int kotaId;
-  String kdSppjj;
-  String nmSppjj;
-  double latCtr;
-  double longCtr;
-  String wilUptd;
-  int uptdId;
-  dynamic createdDate;
-  dynamic createdBy;
-  String updatedDate;
-  dynamic updatedBy;
-  dynamic foto;
-  dynamic foto1;
-  dynamic foto2;
-  dynamic video;
-  String index;
-  dynamic createdAt;
-  String updatedAt;
 
   factory Ruas.fromJson(Map<String, dynamic> json) => Ruas(
-        id: json["id"],
         idRuasJalan: json["id_ruas_jalan"],
         namaRuasJalan: json["nama_ruas_jalan"],
-        sup: json["sup"],
-        lokasi: json["lokasi"],
-        panjang: json["panjang"],
-        staAwal: json["sta_awal"],
-        staAkhir: json["sta_akhir"],
-        latAwal: json["lat_awal"].toDouble(),
-        longAwal: json["long_awal"].toDouble(),
-        latAkhir: json["lat_akhir"].toDouble(),
-        longAkhir: json["long_akhir"].toDouble(),
-        l: json["L"],
-        kabKota: json["kab_kota"],
-        kotaId: json["kota_id"],
-        kdSppjj: json["kd_sppjj"],
-        nmSppjj: json["nm_sppjj"],
-        latCtr: json["lat_ctr"].toDouble(),
-        longCtr: json["long_ctr"].toDouble(),
-        wilUptd: json["wil_uptd"],
-        uptdId: json["uptd_id"],
-        createdDate: json["created_date"],
-        createdBy: json["created_by"],
-        updatedDate: json["updated_date"],
-        updatedBy: json["updated_by"],
-        foto: json["foto"],
-        foto1: json["foto_1"],
-        foto2: json["foto_2"],
-        video: json["video"],
-        index: json["index"],
-        createdAt: json["created_at"],
-        updatedAt: json["updated_at"],
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
         "id_ruas_jalan": idRuasJalan,
         "nama_ruas_jalan": namaRuasJalan,
-        "sup": sup,
-        "lokasi": lokasi,
-        "panjang": panjang,
-        "sta_awal": staAwal,
-        "sta_akhir": staAkhir,
-        "lat_awal": latAwal,
-        "long_awal": longAwal,
-        "lat_akhir": latAkhir,
-        "long_akhir": longAkhir,
-        "L": l,
-        "kab_kota": kabKota,
-        "kota_id": kotaId,
-        "kd_sppjj": kdSppjj,
-        "nm_sppjj": nmSppjj,
-        "lat_ctr": latCtr,
-        "long_ctr": longCtr,
-        "wil_uptd": wilUptd,
-        "uptd_id": uptdId,
-        "created_date": createdDate,
-        "created_by": createdBy,
-        "updated_date": updatedDate,
-        "updated_by": updatedBy,
-        "foto": foto,
-        "foto_1": foto1,
-        "foto_2": foto2,
-        "video": video,
-        "index": index,
-        "created_at": createdAt,
-        "updated_at": updatedAt,
       };
 }
 

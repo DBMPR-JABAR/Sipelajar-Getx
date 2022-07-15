@@ -15,24 +15,25 @@ class NewsResponseModel {
 
   bool success;
   String message;
-  Data data;
+  List<NewsData> data;
 
   factory NewsResponseModel.fromJson(Map<String, dynamic> json) =>
       NewsResponseModel(
         success: json["success"],
         message: json["message"],
-        data: Data.fromJson(json["data"]),
+        data:
+            List<NewsData>.from(json["data"].map((x) => NewsData.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "success": success,
         "message": message,
-        "data": data.toJson(),
+        "data": List<dynamic>.from(data.map((x) => x.toJson())),
       };
 }
 
-class Data {
-  Data({
+class NewsData {
+  NewsData({
     required this.id,
     required this.title,
     required this.slug,
@@ -43,8 +44,6 @@ class Data {
     required this.userId,
     required this.createdAt,
     required this.updatedAt,
-    required this.publishedAtForHuman,
-    required this.publishedBy,
   });
 
   int id;
@@ -57,10 +56,8 @@ class Data {
   int userId;
   String createdAt;
   String updatedAt;
-  String publishedAtForHuman;
-  PublishedBy publishedBy;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory NewsData.fromJson(Map<String, dynamic> json) => NewsData(
         id: json["id"],
         title: json["title"],
         slug: json["slug"],
@@ -71,8 +68,6 @@ class Data {
         userId: json["user_id"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
-        publishedAtForHuman: json["publishedAtForHuman"],
-        publishedBy: PublishedBy.fromJson(json["published_by"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -84,88 +79,6 @@ class Data {
         "content": content,
         "published_at": publishedAt,
         "user_id": userId,
-        "created_at": createdAt,
-        "updated_at": updatedAt,
-        "publishedAtForHuman": publishedAtForHuman,
-        "published_by": publishedBy.toJson(),
-      };
-}
-
-class PublishedBy {
-  PublishedBy({
-    required this.id,
-    required this.name,
-    required this.email,
-    required this.emailVerifiedAt,
-    required this.kodeOtp,
-    required this.role,
-    required this.internalRoleId,
-    required this.sup,
-    required this.supId,
-    required this.uptdId,
-    required this.blokir,
-    required this.isDelete,
-    required this.fcmToken,
-    required this.twoFactorSecret,
-    required this.twoFactorRecoveryCodes,
-    required this.createdAt,
-    required this.updatedAt,
-  });
-
-  int id;
-  String name;
-  String email;
-  String emailVerifiedAt;
-  dynamic kodeOtp;
-  String role;
-  int internalRoleId;
-  dynamic sup;
-  dynamic supId;
-  dynamic uptdId;
-  String blokir;
-  dynamic isDelete;
-  String fcmToken;
-  dynamic twoFactorSecret;
-  dynamic twoFactorRecoveryCodes;
-  String createdAt;
-  dynamic updatedAt;
-
-  factory PublishedBy.fromJson(Map<String, dynamic> json) => PublishedBy(
-        id: json["id"],
-        name: json["name"],
-        email: json["email"],
-        emailVerifiedAt: json["email_verified_at"],
-        kodeOtp: json["kode_otp"],
-        role: json["role"],
-        internalRoleId: json["internal_role_id"],
-        sup: json["sup"],
-        supId: json["sup_id"],
-        uptdId: json["uptd_id"],
-        blokir: json["blokir"],
-        isDelete: json["is_delete"],
-        fcmToken: json["fcm_token"],
-        twoFactorSecret: json["two_factor_secret"],
-        twoFactorRecoveryCodes: json["two_factor_recovery_codes"],
-        createdAt: json["created_at"],
-        updatedAt: json["updated_at"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "email": email,
-        "email_verified_at": emailVerifiedAt,
-        "kode_otp": kodeOtp,
-        "role": role,
-        "internal_role_id": internalRoleId,
-        "sup": sup,
-        "sup_id": supId,
-        "uptd_id": uptdId,
-        "blokir": blokir,
-        "is_delete": isDelete,
-        "fcm_token": fcmToken,
-        "two_factor_secret": twoFactorSecret,
-        "two_factor_recovery_codes": twoFactorRecoveryCodes,
         "created_at": createdAt,
         "updated_at": updatedAt,
       };

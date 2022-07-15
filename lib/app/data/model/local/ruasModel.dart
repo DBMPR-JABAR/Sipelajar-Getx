@@ -69,7 +69,6 @@ class RuasJalanModel {
     final List<Map<String, dynamic>> maps = await database.query('ruas');
     return List.generate(maps.length, (i) {
       return RuasJalanModel(
-        id: maps[i]['id'] as int,
         namaRuasJalan: maps[i]['nama_ruas_jalan'] as String,
         idRuasJalan: maps[i]['id_ruas_jalan'] as String,
       );

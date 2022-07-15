@@ -13,7 +13,7 @@ class RekapResponseModel {
     required this.data,
   });
 
-  bool success;
+  bool? success;
   String message;
   Data data;
 

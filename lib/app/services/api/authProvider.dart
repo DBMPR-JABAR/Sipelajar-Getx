@@ -13,7 +13,7 @@ class AuthProvider {
   static final storage = GetStorage();
   static final accestoken = storage.read('accestoken');
 
-  static Future<LoginResponModel> login(
+  static Future<LoginResponModel?> login(
       String username, String password) async {
     try {
       final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
@@ -34,7 +34,7 @@ class AuthProvider {
       return loginResponModelFromJson(response.body);
     } catch (e) {
       showToast('Terjadi Kesalahan');
-      throw Exception(e);
+      return null;
     }
   }
 

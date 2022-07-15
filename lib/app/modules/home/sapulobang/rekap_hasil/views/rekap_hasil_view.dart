@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sipelajar/app/modules/home/component/appbar.dart';
 
+import '../component/detail_rekap_lobang.dart';
 import '../controllers/rekap_hasil_controller.dart';
 
 class RekapHasilView extends GetView<RekapHasilController> {
@@ -26,54 +27,57 @@ class RekapHasilView extends GetView<RekapHasilController> {
                     borderRadius: BorderRadius.circular(10),
                     color: const Color.fromARGB(255, 250, 79, 67),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text('Lubang',
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w900,
-                                    color: Colors.white)),
-                            const SizedBox(height: 15),
-                            Obx(() => Text(
-                                'Total : ${controller.totalLubang.value}',
-                                style: const TextStyle(
-                                    fontSize: 16, color: Colors.white))),
-                            const SizedBox(height: 10),
-                            Obx(() => Text(
-                                'Panjang : ${controller.totalPanjangLubang.value} KM',
-                                style: const TextStyle(
-                                    fontSize: 16, color: Colors.white))),
-                          ],
+                  child: InkWell(
+                    onTap: () => Get.to(() => const RekapLubang()),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text('Lubang',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w900,
+                                      color: Colors.white)),
+                              const SizedBox(height: 15),
+                              Obx(() => Text(
+                                  'Total : ${controller.totalLubang.value}',
+                                  style: const TextStyle(
+                                      fontSize: 16, color: Colors.white))),
+                              const SizedBox(height: 10),
+                              Obx(() => Text(
+                                  'Panjang : ${controller.totalPanjangLubang.value} KM',
+                                  style: const TextStyle(
+                                      fontSize: 16, color: Colors.white))),
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text('Potensi Lubang',
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w900,
-                                    color: Colors.white)),
-                            const SizedBox(height: 15),
-                            Obx(() => Text(
-                                'Total : ${controller.totalPotensiLubang}',
-                                style: const TextStyle(
-                                    fontSize: 16, color: Colors.white))),
-                            const SizedBox(height: 10),
-                            Obx(() => Text(
-                                'Panjang : ${controller.totalPanjangPotensiLubang.value} KM',
-                                style: const TextStyle(
-                                    fontSize: 16, color: Colors.white))),
-                          ],
+                        SizedBox(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text('Potensi Lubang',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w900,
+                                      color: Colors.white)),
+                              const SizedBox(height: 15),
+                              Obx(() => Text(
+                                  'Total : ${controller.totalPotensiLubang}',
+                                  style: const TextStyle(
+                                      fontSize: 16, color: Colors.white))),
+                              const SizedBox(height: 10),
+                              Obx(() => Text(
+                                  'Panjang : ${controller.totalPanjangPotensiLubang.value} KM',
+                                  style: const TextStyle(
+                                      fontSize: 16, color: Colors.white))),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   )),
               const SizedBox(height: 15),
               const Text('Penanganan',

@@ -3,10 +3,10 @@ import 'package:sqflite/sqflite.dart';
 
 import '../../../services/database/database.dart';
 
-EntryLubangModel EntryLubangModelFromJson(String str) =>
+EntryLubangModel entryLubangModelFromJson(String str) =>
     EntryLubangModel.fromJson(json.decode(str));
 
-String EntryLubangModelToJson(EntryLubangModel data) =>
+String entryLubangModelToJson(EntryLubangModel data) =>
     json.encode(data.toJson());
 
 class EntryLubangModel {

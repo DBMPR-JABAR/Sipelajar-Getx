@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:sipelajar/app/services/api/authProvider.dart';
 
@@ -33,7 +32,7 @@ class FCM {
   }
 
   foregroundNotification() {
-    FirebaseMessaging.onMessage.listen((event) {
+    FirebaseMessaging.onMessage.listen((event) async {
       print('foreground: $event');
       print('background: ${event.notification!.android!.priority}');
       print(event.data);
@@ -41,7 +40,7 @@ class FCM {
   }
 
   backgroundNotification() {
-    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+    FirebaseMessaging.onMessageOpenedApp.listen((event) async {
       print('background: ${event.notification!.android!.priority}');
       print(event.data);
     });

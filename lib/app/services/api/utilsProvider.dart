@@ -9,6 +9,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sipelajar/app/data/model/api/updateInfoModel.dart';
 import 'package:sipelajar/app/services/connectivity/connectivity.dart';
 
+import '../../data/model/api/newsResponseModel.dart';
 import '../../helper/config.dart';
 import '../../helper/utils.dart';
 
@@ -69,6 +70,19 @@ class UtilsProvider {
       return 'no internet';
     } on Exception catch (_) {
       return 'error';
+    }
+  }
+
+  static Future<NewsResponseModel?> getNews() async {
+    try {
+      final response = await client.get(Config.listNews);
+      final data = json.decode(response.body);
+      return NewsResponseModel.fromJson(data);
+    } catch (e) {
+      if (e is SocketException) {
+        connection.connectionStatus.value = false;
+      }
+      return null;
     }
   }
 }

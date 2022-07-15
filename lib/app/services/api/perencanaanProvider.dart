@@ -55,7 +55,7 @@ class PerencanaanProvider {
   }
 
   static Future<String?> jadwalLubang(
-      String id, String date, String keterangan) async {
+      int id, String date, String keterangan) async {
     try {
       final response = await client
           .post(
@@ -74,7 +74,6 @@ class PerencanaanProvider {
       var responseJson = json.decode(response.body);
       return responseJson['message'];
     } catch (e) {
-      print(e);
       showToast('Tidak ada Koneksi Internet / Internet Tidak Stable');
       throw Exception('Terjadi kesalahan');
     }

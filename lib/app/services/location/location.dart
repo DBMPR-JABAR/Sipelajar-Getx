@@ -7,7 +7,6 @@ class LocationService extends GetxService {
   var availableMaps = <AvailableMap>[].obs;
   GeolocatorPlatform location = GeolocatorPlatform.instance;
   var serviceEnabled = false;
-  var isLoading = true.obs;
   late LocationPermission permission;
   final LocationSettings locationSettings = const LocationSettings(
     accuracy: LocationAccuracy.bestForNavigation,
@@ -41,23 +40,19 @@ class LocationService extends GetxService {
   }
 
   Future<LocationService> init() async {
-    serviceEnabled = await location.isLocationServiceEnabled();
     permission = await location.checkPermission();
-    if (!serviceEnabled) {
-      serviceEnabled = await location.openLocationSettings();
-      if (!serviceEnabled) {
-        serviceEnabled = await location.openLocationSettings();
-      }
-    }
-    permission = await location.requestPermission();
     if (permission == LocationPermission.denied) {
-      permission = await location.requestPermission();
-      if (permission != LocationPermission.unableToDetermine) {
-        permission = await location.requestPermission();
+      permission = await location.checkPermission();
+      if (permission == LocationPermission.denied) {
+        await location.requestPermission();
       }
     }
+
+    await location.getCurrentPosition(
+      locationSettings: locationSettings,
+    );
+
     availableMaps.value = await MapLauncher.installedMaps;
-    isLoading.value = false;
 
     return this;
   }
