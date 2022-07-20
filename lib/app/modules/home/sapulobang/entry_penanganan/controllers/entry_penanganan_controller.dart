@@ -76,10 +76,8 @@ class EntryPenangananController extends GetxController {
 
   void getDataPenanganan() async {
     isLoading.value = true;
-    data.clear();
     Future.delayed(const Duration(seconds: 1), () async {
       if (connectionService.connectionStatus.value) {
-        print('get data penanganan');
         await PenangananProvider.getDraftPenanganan().then((value) async {
           if (value == null) {
           } else {

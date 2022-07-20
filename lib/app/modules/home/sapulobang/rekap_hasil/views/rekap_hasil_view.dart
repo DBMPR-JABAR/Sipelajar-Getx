@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sipelajar/app/modules/home/component/appbar.dart';
 
+import '../component/detail_rekap.dart';
 import '../component/detail_rekap_lobang.dart';
 import '../controllers/rekap_hasil_controller.dart';
 
@@ -80,55 +81,65 @@ class RekapHasilView extends GetView<RekapHasilController> {
                     ),
                   )),
               const SizedBox(height: 15),
-              const Text('Penanganan',
+              const Text('Perencanaan',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
-              Container(
-                  padding: const EdgeInsets.all(15),
-                  width: Get.width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: const Color.fromARGB(255, 255, 238, 0),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Obx(() => Text(
-                          'Total Perencanaan : ${controller.totalPerencanaan.value}',
-                          style: const TextStyle(
-                              fontSize: 16, color: Colors.black))),
-                      const SizedBox(height: 10),
-                      Obx(() => Text(
-                          'Total Panjang Perencanaan : ${controller.panjangPerencanaan.value} KM',
-                          style: const TextStyle(
-                              fontSize: 16, color: Colors.black))),
-                    ],
-                  )),
+              InkWell(
+                onTap: () => Get.to(() => const RekapDetail(
+                      argument: 'Perencanaan',
+                    )),
+                child: Container(
+                    padding: const EdgeInsets.all(15),
+                    width: Get.width,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color.fromARGB(255, 255, 238, 0),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Obx(() => Text(
+                            'Total Perencanaan : ${controller.totalPerencanaan.value}',
+                            style: const TextStyle(
+                                fontSize: 16, color: Colors.black))),
+                        const SizedBox(height: 10),
+                        Obx(() => Text(
+                            'Total Panjang Perencanaan : ${controller.panjangPerencanaan.value} KM',
+                            style: const TextStyle(
+                                fontSize: 16, color: Colors.black))),
+                      ],
+                    )),
+              ),
               const SizedBox(height: 15),
               const Text('Selesai Ditangani',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
-              Container(
-                  padding: const EdgeInsets.all(15),
-                  width: Get.width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: const Color.fromARGB(255, 3, 202, 19),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Obx(() => Text(
-                          'Total Ditangani : ${controller.totalPenanganan.value}',
-                          style: const TextStyle(
-                              fontSize: 16, color: Colors.black))),
-                      const SizedBox(height: 10),
-                      Obx(() => Text(
-                          'Total Panjang Ditangani : ${controller.panjangPenanganan.value} KM',
-                          style: const TextStyle(
-                              fontSize: 16, color: Colors.black))),
-                    ],
-                  )),
+              InkWell(
+                onTap: () => Get.to(() => const RekapDetail(
+                      argument: 'Selesai Ditangani',
+                    )),
+                child: Container(
+                    padding: const EdgeInsets.all(15),
+                    width: Get.width,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color.fromARGB(255, 3, 202, 19),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Obx(() => Text(
+                            'Total Ditangani : ${controller.totalPenanganan.value}',
+                            style: const TextStyle(
+                                fontSize: 16, color: Colors.black))),
+                        const SizedBox(height: 10),
+                        Obx(() => Text(
+                            'Total Panjang Ditangani : ${controller.panjangPenanganan.value} KM',
+                            style: const TextStyle(
+                                fontSize: 16, color: Colors.black))),
+                      ],
+                    )),
+              ),
             ],
           ),
         ));

@@ -16,6 +16,7 @@ abstract class Routes {
   static const ENTRY_RENCANA = _Paths.HOME + _Paths.ENTRY_RENCANA;
   static const REKAP_HASIL = _Paths.HOME + _Paths.REKAP_HASIL;
   static const PROFILE = _Paths.PROFILE;
+  static const ENTRY_PEKERJAAN = _Paths.ENTRY_PEKERJAAN;
 }
 
 abstract class _Paths {
@@ -32,4 +33,5 @@ abstract class _Paths {
   static const ENTRY_RENCANA = '/entry-rencana';
   static const REKAP_HASIL = '/rekap-hasil';
   static const PROFILE = '/profile';
+  static const ENTRY_PEKERJAAN = '/entry-pekerjaan';
 }

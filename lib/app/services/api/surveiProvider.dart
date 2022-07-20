@@ -143,6 +143,40 @@ class SurveiProvider {
     }
   }
 
+  static Future<RekapLubangResponseModel?> rekapPerencanaan() async {
+    try {
+      final response = await client.get(
+        Config.rekapDalamPerencanaan,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $accestoken',
+        },
+      );
+      return rekapLubangResponseModelFromJson(response.body);
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  static Future<RekapLubangResponseModel?> rekapPenanganan() async {
+    try {
+      final response = await client.get(
+        Config.rekapSelesai,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $accestoken',
+        },
+      );
+      return rekapLubangResponseModelFromJson(response.body);
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
   static Future<String?> deleteLubang(int id) async {
     try {
       final response = await client.get(
